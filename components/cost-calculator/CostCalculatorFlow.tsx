@@ -4,70 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import ProgressBar from "@/components/assessment/ProgressBar";
 import ToolLeadForm from "@/components/tools/ToolLeadForm";
-
-// ── Cost data ──────────────────────────────────────────────────────────────
-// Placeholder ranges based on national averages (Genworth-aligned).
-// Will be replaced with real zip-level data once facility DB is integrated.
-
-interface CareTypeCost {
-  label: string;
-  icon: string;
-  low: number;
-  median: number;
-  high: number;
-  unit: string;          // e.g. "/month" or "/hour"
-  medianAnnual: number;
-  monthlyNote?: string;
-  learnMoreHref: string;
-}
-
-const CARE_COSTS: CareTypeCost[] = [
-  {
-    label: "Memory Care",
-    icon: "🧠",
-    low: 4500,
-    median: 6500,
-    high: 8500,
-    unit: "/month",
-    medianAnnual: 78000,
-    learnMoreHref: "/memory-care/",
-  },
-  {
-    label: "Assisted Living",
-    icon: "🏠",
-    low: 3500,
-    median: 4500,
-    high: 6500,
-    unit: "/month",
-    medianAnnual: 54000,
-    learnMoreHref: "/assisted-living/",
-  },
-  {
-    label: "Home Care",
-    icon: "🤝",
-    low: 25,
-    median: 30,
-    high: 35,
-    unit: "/hour",
-    medianAnnual: 31200,
-    monthlyNote: "~$2,600/mo (20 hrs/wk)",
-    learnMoreHref: "/home-care/",
-  },
-  {
-    label: "Nursing Home",
-    icon: "🏥",
-    low: 7000,
-    median: 9000,
-    high: 12000,
-    unit: "/month",
-    medianAnnual: 108000,
-    learnMoreHref: "/nursing-homes/",
-  },
-];
-
-function fmt(n: number) {
-  return `$${n.toLocaleString()}`;
-}
+import { useCostData } from "@/hooks/useCostData";
+import { CostResultsCards } from "@/components/costs/CostResultsCards";
 
 // ── Main component ─────────────────────────────────────────────────────────
 
@@ -240,6 +178,8 @@ function ResultsScreen({
   scrollToForm: () => void;
   onStartOver: () => void;
 }) {
+  const { summary, loading, locationLabel, stateName, hasMsaData } = useCostData(zip);
+
   return (
     <div className="bg-slate-50 min-h-screen">
       {/* Sticky header */}
@@ -269,58 +209,15 @@ function ResultsScreen({
           </h1>
         </div>
 
-        {/* Care type cost cards */}
-        <div className="space-y-4">
-          {CARE_COSTS.map((care) => (
-            <section
-              key={care.label}
-              className="bg-white rounded-2xl px-6 py-5 shadow-sm"
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-xl">{care.icon}</span>
-                <h2 className="text-lg font-bold text-slate-800">{care.label}</h2>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3 mb-4">
-                {[
-                  { label: "Low end", value: `${fmt(care.low)}${care.unit}` },
-                  { label: "Median", value: `${fmt(care.median)}${care.unit}` },
-                  { label: "High end", value: `${fmt(care.high)}${care.unit}` },
-                ].map(({ label, value }) => (
-                  <div key={label} className="bg-slate-50 rounded-xl p-3 text-center">
-                    <p className="text-xs text-slate-400 mb-1">{label}</p>
-                    <p className="text-sm font-bold text-slate-800 leading-tight">{value}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between bg-teal-50 rounded-xl px-4 py-2.5">
-                <span className="text-sm text-teal-700">
-                  {care.monthlyNote ?? `Median monthly: ${fmt(care.median)}`}
-                </span>
-                <span className="text-sm font-bold text-teal-800">
-                  {fmt(care.medianAnnual)}/yr
-                </span>
-              </div>
-
-              <div className="mt-3 flex justify-end">
-                <Link
-                  href={care.learnMoreHref}
-                  className="text-xs text-teal-600 hover:text-teal-800 font-medium transition-colors"
-                >
-                  Learn about {care.label} →
-                </Link>
-              </div>
-            </section>
-          ))}
-        </div>
-
-        {/* Disclaimer */}
-        <p className="text-xs text-slate-400 leading-relaxed px-1">
-          These are estimates based on national averages. Actual costs vary by community
-          and level of care. Zip-level pricing will be available once our facility
-          database is live.
-        </p>
+        {/* Care type cost cards — real data from Supabase */}
+        <CostResultsCards
+          summary={summary}
+          loading={loading}
+          locationLabel={locationLabel}
+          stateName={stateName}
+          hasMsaData={hasMsaData}
+          zip={zip}
+        />
 
         {/* Not sure which type callout */}
         <div className="bg-teal-50 border border-teal-100 rounded-2xl px-5 py-5">

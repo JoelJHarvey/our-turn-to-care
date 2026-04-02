@@ -8,9 +8,10 @@ import {
   RECOMMENDATION_LABELS,
   RECOMMENDATION_DESCRIPTIONS,
   SECONDARY_DESCRIPTIONS,
-  COST_DATA,
   generateWhyText,
 } from "@/lib/assessment/results";
+import { useCostData } from "@/hooks/useCostData";
+import { CostEstimateBlock } from "@/components/costs/CostResultsCards";
 
 interface ResultsPageProps {
   results: AssessmentResults;
@@ -21,10 +22,6 @@ interface ResultsPageProps {
 
 function cap(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function fmt(n: number) {
-  return `$${n.toLocaleString()}`;
 }
 
 // ── Financial card data builder ────────────────────────────────────────────
@@ -163,7 +160,18 @@ export default function ResultsPage({ results: r, onStartOver }: ResultsPageProp
   const recKey = r.primaryRecommendation;
   const recLabel = RECOMMENDATION_LABELS[recKey] ?? recKey;
   const recDesc = RECOMMENDATION_DESCRIPTIONS[recKey] ?? "";
-  const costs = COST_DATA[recKey];
+
+  const { summary, loading, locationLabel, stateName } = useCostData(r.zipCode ?? null);
+
+  const CARE_TYPE_KEY_MAP: Record<string, 'memoryCare' | 'assistedLiving' | 'homeCare' | 'nursingHome' | 'adultDayCare'> = {
+    memory_care: 'memoryCare',
+    assisted_living: 'assistedLiving',
+    home_care: 'homeCare',
+    aging_in_place: 'homeCare',
+    nursing_home: 'nursingHome',
+    independent: 'homeCare',
+  };
+  const careTypeKey = CARE_TYPE_KEY_MAP[recKey] ?? 'homeCare';
 
   const secondaryKey = r.secondaryRecommendation;
   const secondaryLabel = RECOMMENDATION_LABELS[secondaryKey] ?? secondaryKey;
@@ -272,64 +280,24 @@ export default function ResultsPage({ results: r, onStartOver }: ResultsPageProp
         )}
 
         {/* ── Section 3: Estimated costs ────────────────────────────────── */}
-        {costs ? (
+        {(loading || summary) ? (
           <section className="bg-white rounded-2xl px-6 py-6 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-800 mb-1">
-              {recLabel} in your area typically costs:
-            </h2>
-            {r.zipCode && (
-              <p className="text-sm text-slate-400 mb-5">
-                Near zip code {r.zipCode}
-              </p>
-            )}
-
-            {/* Three cost figures */}
-            <div className="grid grid-cols-3 gap-3 mb-5">
-              {[
-                { label: "Low end", value: costs.low },
-                { label: "Median", value: costs.median },
-                { label: "High end", value: costs.high },
-              ].map(({ label, value }) => (
-                <div
-                  key={label}
-                  className="bg-slate-50 rounded-xl p-3 text-center"
-                >
-                  <p className="text-xs text-slate-400 mb-1">{label}</p>
-                  <p className="text-lg font-bold text-slate-800">
-                    {fmt(value)}
-                  </p>
-                  <p className="text-xs text-slate-400">/month</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Annual estimate */}
-            <div className="flex items-center justify-between bg-teal-50 rounded-xl px-4 py-3 mb-4">
-              <span className="text-sm text-teal-700 font-medium">
-                Estimated annual cost
-              </span>
-              <span className="text-lg font-bold text-teal-800">
-                {fmt(costs.median * 12)}/year
-              </span>
-            </div>
-
-            {costs.note && (
-              <p className="text-xs text-slate-400 mb-3 italic">{costs.note}</p>
-            )}
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Costs vary by location and level of care. We'll have more precise
-              estimates for your zip code soon.
-            </p>
+            <CostEstimateBlock
+              summary={summary}
+              recommendedCareType={careTypeKey}
+              locationLabel={locationLabel}
+              stateName={stateName}
+              loading={loading}
+            />
           </section>
-        ) : (
-          /* Independent level — no cost section */
+        ) : recKey === 'independent' ? (
           <section className="bg-white rounded-2xl px-6 py-6 shadow-sm">
             <p className="text-slate-600 text-sm leading-relaxed">
               No immediate care costs — but planning ahead can save money
               and stress later. A little preparation now goes a long way.
             </p>
           </section>
-        )}
+        ) : null}
 
         {/* ── Section 3A: Financial assistance ──────────────────────────── */}
         <section>

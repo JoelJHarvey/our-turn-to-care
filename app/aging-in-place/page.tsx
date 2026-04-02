@@ -267,6 +267,32 @@ export default function AgingInPlacePage() {
         </div>
       </section>
 
+      {/* ── Quick Stats Bar ───────────────────────────────────────────────── */}
+      <section className="bg-teal-700 py-10 px-4 sm:px-6">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { stat: "77%", label: "Of adults 50+ want to age at home" },
+              { stat: "$33.99/hr", label: "Median home health aide cost (2025)" },
+              { stat: "1 in 4", label: "Adults 65+ falls each year" },
+              { stat: "53 million", label: "Family caregivers in the U.S." },
+            ].map(({ stat, label }) => (
+              <div key={stat} className="flex flex-col items-center gap-1">
+                <span className="text-2xl sm:text-3xl font-bold text-white leading-tight">
+                  {stat}
+                </span>
+                <span className="text-sm text-teal-100 leading-snug max-w-[140px]">
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-xs text-teal-300 mt-6">
+            Source: AARP 2024 Home &amp; Community Survey; CareScout 2025 Cost of Care Survey; CDC Injury Prevention
+          </p>
+        </div>
+      </section>
+
       {/* ── Body ──────────────────────────────────────────────────────────── */}
       <section className="px-4 sm:px-6 py-16 bg-white">
         <div className="max-w-[1100px] mx-auto">

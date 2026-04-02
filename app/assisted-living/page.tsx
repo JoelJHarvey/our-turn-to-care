@@ -249,6 +249,32 @@ export default function AssistedLivingPage() {
         </div>
       </section>
 
+      {/* ── Quick Stats Bar ───────────────────────────────────────────────── */}
+      <section className="bg-teal-700 py-10 px-4 sm:px-6">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { stat: "818,000", label: "Americans living in assisted living" },
+              { stat: "$5,511/mo", label: "Median assisted living cost (2025)" },
+              { stat: "~30,000", label: "Assisted living communities in the U.S." },
+              { stat: "7 in 10", label: "Residents need help bathing or dressing" },
+            ].map(({ stat, label }) => (
+              <div key={stat} className="flex flex-col items-center gap-1">
+                <span className="text-2xl sm:text-3xl font-bold text-white leading-tight">
+                  {stat}
+                </span>
+                <span className="text-sm text-teal-100 leading-snug max-w-[140px]">
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-xs text-teal-300 mt-6">
+            Source: NCAL/AHCA 2024 Assisted Living Data Report; CareScout 2025 Cost of Care Survey
+          </p>
+        </div>
+      </section>
+
       {/* ── Body ──────────────────────────────────────────────────────────── */}
       <section className="px-4 sm:px-6 py-16 bg-white">
         <div className="max-w-[1100px] mx-auto">
