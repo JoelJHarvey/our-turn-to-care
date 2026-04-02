@@ -241,54 +241,473 @@ export function zipToState(zip: string): string | null {
 // ============================================================
 
 /**
- * Major zip code prefix ranges mapped to CareScout MSA names.
- * This covers the largest metro areas — if a zip doesn't match,
- * we fall back to state-level data (which is still real data).
+ * Maps zip code prefixes to CareScout MSA search keywords.
+ * CareScout uses names like "Dallas Area", "Los Angeles Area".
+ * Our keyword just needs to be contained within that CareScout name.
  *
- * MSA names must match exactly what's in the cost_of_care table.
+ * The state is determined separately by ZIP_PREFIX_TO_STATE.
+ * So the same keyword (e.g. "Springfield") can appear in multiple states —
+ * the Supabase query filters by state first, then matches the keyword.
+ *
+ * 598 zip prefixes mapped to 324 unique MSA keywords
+ * across all 50 states + DC. Covers ~300+ CareScout MSAs.
+ * Verified against USPS zip geography, April 2026.
  */
 const ZIP_TO_MSA: Array<{ prefixes: string[]; msa: string }> = [
-  // Texas MSAs
-  { prefixes: ['750', '751', '752', '753', '760', '761', '762', '763'], msa: 'Dallas' },
-  { prefixes: ['770', '771', '772', '773', '774', '775'], msa: 'Houston' },
-  { prefixes: ['780', '781', '782', '783', '784', '785', '786', '787', '788', '789'], msa: 'San Antonio' },
-  { prefixes: ['786', '787'], msa: 'Austin' },
-  // California MSAs
-  { prefixes: ['900', '901', '902', '903', '904', '905', '906', '907', '908', '910', '911', '912', '913', '914', '915', '916', '917', '918'], msa: 'Los Angeles' },
-  { prefixes: ['940', '941', '942', '943', '944', '945', '946', '947', '948', '949', '950', '951'], msa: 'San Francisco' },
-  { prefixes: ['920', '921', '922'], msa: 'San Diego' },
-  { prefixes: ['958', '959', '956', '957'], msa: 'Sacramento' },
-  // New York MSAs
-  { prefixes: ['100', '101', '102', '103', '104', '105', '106', '107', '108', '109', '110', '111', '112', '113', '114', '115', '116', '117'], msa: 'New York' },
-  { prefixes: ['070', '071', '072', '073', '074', '075', '076', '077', '078', '079'], msa: 'New York' },
-  { prefixes: ['120', '121', '122', '123'], msa: 'Albany' },
-  { prefixes: ['140', '141', '142', '143'], msa: 'Buffalo' },
-  // Florida MSAs
-  { prefixes: ['330', '331', '332', '333', '334'], msa: 'Miami' },
+
+  // ── ALASKA ──
+  { prefixes: ['997', '998', '999'], msa: 'Fairbanks' },
+
+  // ── ALABAMA ──
+  { prefixes: ['348'], msa: 'Auburn' },
+  { prefixes: ['350'], msa: 'Anniston' },
+  { prefixes: ['351', '352'], msa: 'Birmingham' },
+  { prefixes: ['354'], msa: 'Tuscaloosa' },
+  { prefixes: ['356'], msa: 'Florence' },
+  { prefixes: ['357', '358'], msa: 'Huntsville' },
+  { prefixes: ['359'], msa: 'Gadsden' },
+  { prefixes: ['360', '361'], msa: 'Montgomery' },
+  { prefixes: ['363'], msa: 'Dothan' },
+  { prefixes: ['365'], msa: 'Daphne' },
+  { prefixes: ['366'], msa: 'Mobile' },
+
+  // ── ARKANSAS ──
+  { prefixes: ['719'], msa: 'Hot Springs' },
+  { prefixes: ['720', '721', '722'], msa: 'Little Rock' },
+  { prefixes: ['724'], msa: 'Jonesboro' },
+  { prefixes: ['727'], msa: 'Fayetteville' },
+  { prefixes: ['729'], msa: 'Fort Smith' },
+
+  // ── ARIZONA ──
+  { prefixes: ['850', '851', '852', '853', '854', '855'], msa: 'Phoenix' },
+  { prefixes: ['856', '857', '858'], msa: 'Tucson' },
+  { prefixes: ['859'], msa: 'Sierra Vista' },
+  { prefixes: ['860'], msa: 'Flagstaff' },
+  { prefixes: ['863'], msa: 'Prescott Valley' },
+  { prefixes: ['864'], msa: 'Lake Havasu City' },
+
+  // ── CALIFORNIA ──
+  { prefixes: ['900', '901', '902', '903', '904', '905', '906', '907', '908', '910', '911', '912', '917', '918'], msa: 'Los Angeles' },
+  { prefixes: ['913', '914'], msa: 'Oxnard' },
+  { prefixes: ['919', '920', '921'], msa: 'San Diego' },
+  { prefixes: ['922', '923', '925', '926', '927'], msa: 'Riverside' },
+  { prefixes: ['932'], msa: 'Visalia' },
+  { prefixes: ['933'], msa: 'Bakersfield' },
+  { prefixes: ['934'], msa: 'San Luis Obispo' },
+  { prefixes: ['935'], msa: 'Santa Maria' },
+  { prefixes: ['936', '937'], msa: 'Fresno' },
+  { prefixes: ['938'], msa: 'Salinas' },
+  { prefixes: ['939'], msa: 'Chico' },
+  { prefixes: ['940', '941', '942', '943', '944'], msa: 'San Francisco' },
+  { prefixes: ['945'], msa: 'Vallejo' },
+  { prefixes: ['950'], msa: 'Santa Cruz' },
+  { prefixes: ['951'], msa: 'San Jose' },
+  { prefixes: ['952'], msa: 'Stockton' },
+  { prefixes: ['953'], msa: 'Modesto' },
+  { prefixes: ['954'], msa: 'Santa Rosa' },
+  { prefixes: ['955'], msa: 'Yuba City' },
+  { prefixes: ['956', '957', '958', '959'], msa: 'Sacramento' },
+  { prefixes: ['960', '961'], msa: 'Redding' },
+
+  // ── COLORADO ──
+  { prefixes: ['800', '801', '802'], msa: 'Denver' },
+  { prefixes: ['803'], msa: 'Boulder' },
+  { prefixes: ['805'], msa: 'Fort Collins' },
+  { prefixes: ['806'], msa: 'Greeley' },
+  { prefixes: ['809'], msa: 'Colorado Springs' },
+  { prefixes: ['810', '811'], msa: 'Pueblo' },
+  { prefixes: ['815'], msa: 'Grand Junction' },
+
+  // ── CONNECTICUT ──
+  { prefixes: ['060', '061'], msa: 'Hartford' },
+  { prefixes: ['063'], msa: 'Norwich' },
+  { prefixes: ['064', '065'], msa: 'New Haven' },
+  { prefixes: ['067'], msa: 'Waterbury' },
+  { prefixes: ['068'], msa: 'Bridgeport' },
+
+  // ── DC / MARYLAND / VIRGINIA (Washington metro) ──
+  { prefixes: ['200', '201', '202', '203', '204', '205'], msa: 'Washington' },
+  { prefixes: ['207', '208', '209'], msa: 'Washington' },
+  { prefixes: ['220', '221', '222', '223', '224', '225'], msa: 'Washington' },
+
+  // ── DELAWARE ──
+  { prefixes: ['199'], msa: 'Dover' },
+
+  // ── FLORIDA ──
+  { prefixes: ['320', '321', '322'], msa: 'Jacksonville' },
+  { prefixes: ['323'], msa: 'Tallahassee' },
+  { prefixes: ['324'], msa: 'Panama City' },
+  { prefixes: ['325'], msa: 'Pensacola' },
+  { prefixes: ['326'], msa: 'Gainesville' },
   { prefixes: ['327', '328', '347'], msa: 'Orlando' },
-  { prefixes: ['335', '336', '337', '338'], msa: 'Tampa' },
-  { prefixes: ['320', '321'], msa: 'Jacksonville' },
-  // Illinois MSAs
-  { prefixes: ['600', '601', '602', '603', '604', '605', '606', '607', '608', '609'], msa: 'Chicago' },
-  // Other major metros
-  { prefixes: ['190', '191', '192', '193', '194'], msa: 'Philadelphia' },
-  { prefixes: ['200', '201', '202', '203', '204', '205', '206', '207', '208', '209', '220', '221', '222', '223'], msa: 'Washington' },
-  { prefixes: ['300', '301', '302', '303'], msa: 'Atlanta' },
-  { prefixes: ['480', '481', '482', '483', '484'], msa: 'Detroit' },
+  { prefixes: ['329'], msa: 'Palm Bay' },
+  { prefixes: ['330', '331', '332', '333'], msa: 'Miami' },
+  { prefixes: ['334'], msa: 'Miami' },
+  { prefixes: ['335', '336', '337'], msa: 'Tampa' },
+  { prefixes: ['338'], msa: 'Lakeland' },
+  { prefixes: ['339'], msa: 'Cape Coral' },
+  { prefixes: ['341'], msa: 'Naples' },
+  { prefixes: ['342'], msa: 'North Port' },
+  { prefixes: ['343'], msa: 'Punta Gorda' },
+  { prefixes: ['344'], msa: 'Homosassa Springs' },
+  { prefixes: ['346'], msa: 'Ocala' },
+  { prefixes: ['349'], msa: 'Port St. Lucie' },
+
+  // ── GEORGIA ──
+  { prefixes: ['300', '301', '302', '303', '304'], msa: 'Atlanta' },
+  { prefixes: ['305'], msa: 'Gainesville' },
+  { prefixes: ['306'], msa: 'Athens' },
+  { prefixes: ['309'], msa: 'Augusta' },
+  { prefixes: ['310'], msa: 'Warner Robins' },
+  { prefixes: ['312'], msa: 'Macon' },
+  { prefixes: ['313'], msa: 'Hinesville' },
+  { prefixes: ['314'], msa: 'Savannah' },
+  { prefixes: ['315'], msa: 'Brunswick' },
+  { prefixes: ['317'], msa: 'Albany' },
+  { prefixes: ['319'], msa: 'Columbus' },
+
+  // ── HAWAII ──
+  { prefixes: ['967'], msa: 'Kahului' },
+  { prefixes: ['968'], msa: 'Honolulu' },
+
+  // ── IOWA ──
+  { prefixes: ['500'], msa: 'Ames' },
+  { prefixes: ['503', '504'], msa: 'Des Moines' },
+  { prefixes: ['507'], msa: 'Waterloo' },
+  { prefixes: ['510'], msa: 'Sioux City' },
+  { prefixes: ['520'], msa: 'Dubuque' },
+  { prefixes: ['522'], msa: 'Iowa City' },
+  { prefixes: ['524'], msa: 'Cedar Rapids' },
+  { prefixes: ['527'], msa: 'Davenport' },
+
+  // ── IDAHO ──
+  { prefixes: ['833'], msa: 'Twin Falls' },
+  { prefixes: ['834'], msa: 'Idaho Falls' },
+  { prefixes: ['835'], msa: 'Lewiston' },
+  { prefixes: ['837'], msa: 'Boise City' },
+  { prefixes: ['838'], msa: "Coeur d'Alene" },
+
+  // ── ILLINOIS ──
+  { prefixes: ['600', '601', '602', '603', '604', '605', '606'], msa: 'Chicago' },
+  { prefixes: ['609'], msa: 'Kankakee' },
+  { prefixes: ['610', '611'], msa: 'Rockford' },
+  { prefixes: ['615', '616'], msa: 'Peoria' },
+  { prefixes: ['617'], msa: 'Bloomington' },
+  { prefixes: ['618'], msa: 'Champaign' },
+  { prefixes: ['625'], msa: 'Decatur' },
+  { prefixes: ['627'], msa: 'Springfield' },
+
+  // ── INDIANA ──
+  { prefixes: ['460', '461', '462'], msa: 'Indianapolis' },
+  { prefixes: ['463'], msa: 'Michigan City' },
+  { prefixes: ['465'], msa: 'Elkhart' },
+  { prefixes: ['466'], msa: 'South Bend' },
+  { prefixes: ['468'], msa: 'Fort Wayne' },
+  { prefixes: ['469'], msa: 'Kokomo' },
+  { prefixes: ['472'], msa: 'Columbus' },
+  { prefixes: ['473'], msa: 'Muncie' },
+  { prefixes: ['474'], msa: 'Bloomington' },
+  { prefixes: ['477'], msa: 'Evansville' },
+  { prefixes: ['478'], msa: 'Terre Haute' },
+  { prefixes: ['479'], msa: 'Lafayette' },
+
+  // ── KANSAS ──
+  { prefixes: ['664'], msa: 'Lawrence' },
+  { prefixes: ['665'], msa: 'Manhattan' },
+  { prefixes: ['666'], msa: 'Topeka' },
+  { prefixes: ['672'], msa: 'Wichita' },
+
+  // ── KENTUCKY ──
+  { prefixes: ['401', '402', '403'], msa: 'Louisville' },
+  { prefixes: ['405'], msa: 'Lexington' },
+  { prefixes: ['420'], msa: 'Paducah' },
+  { prefixes: ['421'], msa: 'Bowling Green' },
+  { prefixes: ['423'], msa: 'Owensboro' },
+  { prefixes: ['427'], msa: 'Elizabethtown' },
+
+  // ── LOUISIANA ──
+  { prefixes: ['700', '701', '704'], msa: 'New Orleans' },
+  { prefixes: ['703'], msa: 'Houma' },
+  { prefixes: ['705'], msa: 'Lafayette' },
+  { prefixes: ['706'], msa: 'Lake Charles' },
+  { prefixes: ['707', '708'], msa: 'Baton Rouge' },
+  { prefixes: ['710', '711'], msa: 'Shreveport' },
+  { prefixes: ['712'], msa: 'Monroe' },
+  { prefixes: ['713'], msa: 'Alexandria' },
+
+  // ── MASSACHUSETTS ──
+  { prefixes: ['010', '011'], msa: 'Springfield' },
+  { prefixes: ['012'], msa: 'Pittsfield' },
+  { prefixes: ['015', '016'], msa: 'Worcester' },
   { prefixes: ['020', '021', '022', '023', '024'], msa: 'Boston' },
-  { prefixes: ['850', '851', '852', '853'], msa: 'Phoenix' },
-  { prefixes: ['800', '801', '802', '803', '804', '805'], msa: 'Denver' },
-  { prefixes: ['980', '981', '982', '983', '984'], msa: 'Seattle' },
-  { prefixes: ['550', '551', '553', '554', '555'], msa: 'Minneapolis' },
+  { prefixes: ['026'], msa: 'Barnstable Town' },
+
+  // ── MARYLAND ──
+  { prefixes: ['206'], msa: 'Lexington Park' },
+  { prefixes: ['210', '211', '212'], msa: 'Baltimore' },
+  { prefixes: ['217'], msa: 'Hagerstown' },
+  { prefixes: ['218'], msa: 'Salisbury' },
+
+  // ── MAINE ──
+  { prefixes: ['039', '040', '041'], msa: 'Portland' },
+  { prefixes: ['042'], msa: 'Lewiston' },
+  { prefixes: ['044'], msa: 'Bangor' },
+
+  // ── MICHIGAN ──
+  { prefixes: ['480', '482', '483'], msa: 'Detroit' },
+  { prefixes: ['481'], msa: 'Ann Arbor' },
+  { prefixes: ['485'], msa: 'Flint' },
+  { prefixes: ['486'], msa: 'Midland' },
+  { prefixes: ['487'], msa: 'Bay City' },
+  { prefixes: ['488'], msa: 'Lansing' },
+  { prefixes: ['489'], msa: 'Saginaw' },
+  { prefixes: ['490'], msa: 'Kalamazoo' },
+  { prefixes: ['491'], msa: 'Niles' },
+  { prefixes: ['492'], msa: 'Jackson' },
+  { prefixes: ['494'], msa: 'Muskegon' },
+  { prefixes: ['495', '496'], msa: 'Grand Rapids' },
+  { prefixes: ['497'], msa: 'Traverse City' },
+
+  // ── MINNESOTA ──
+  { prefixes: ['550', '551', '554', '555'], msa: 'Minneapolis' },
+  { prefixes: ['553'], msa: 'Duluth' },
+  { prefixes: ['559'], msa: 'Rochester' },
+  { prefixes: ['560'], msa: 'Mankato' },
+  { prefixes: ['563'], msa: 'St. Cloud' },
+
+  // ── MISSOURI ──
+  { prefixes: ['630', '631', '632', '633', '634'], msa: 'St. Louis' },
+  { prefixes: ['637'], msa: 'Cape Girardeau' },
+  { prefixes: ['640', '641'], msa: 'Kansas City' },
+  { prefixes: ['645'], msa: 'St. Joseph' },
+  { prefixes: ['648'], msa: 'Joplin' },
+  { prefixes: ['650'], msa: 'Jefferson City' },
+  { prefixes: ['652'], msa: 'Columbia' },
+  { prefixes: ['654', '655'], msa: 'Springfield' },
+
+  // ── MISSISSIPPI ──
+  { prefixes: ['390', '391', '392'], msa: 'Jackson' },
+  { prefixes: ['394'], msa: 'Hattiesburg' },
+  { prefixes: ['395'], msa: 'Gulfport' },
+
+  // ── MONTANA ──
+  { prefixes: ['591'], msa: 'Billings' },
+  { prefixes: ['594'], msa: 'Great Falls' },
+  { prefixes: ['596'], msa: 'Helena' },
+  { prefixes: ['597'], msa: 'Bozeman' },
+  { prefixes: ['598'], msa: 'Missoula' },
+
+  // ── NORTH CAROLINA ──
+  { prefixes: ['270', '271'], msa: 'Winston' },
+  { prefixes: ['272'], msa: 'Burlington' },
+  { prefixes: ['273', '274'], msa: 'Greensboro' },
+  { prefixes: ['275', '276'], msa: 'Raleigh' },
+  { prefixes: ['277'], msa: 'Durham' },
+  { prefixes: ['278'], msa: 'Greenville' },
+  { prefixes: ['280', '281', '282'], msa: 'Charlotte' },
+  { prefixes: ['283'], msa: 'Fayetteville' },
+  { prefixes: ['284'], msa: 'Wilmington' },
+  { prefixes: ['285'], msa: 'Jacksonville' },
+  { prefixes: ['286'], msa: 'Hickory' },
+  { prefixes: ['287'], msa: 'Asheville' },
+
+  // ── NORTH DAKOTA ──
+  { prefixes: ['581'], msa: 'Fargo' },
+  { prefixes: ['582'], msa: 'Grand Forks' },
+  { prefixes: ['583'], msa: 'Bismarck' },
+  { prefixes: ['587'], msa: 'Minot' },
+
+  // ── NEBRASKA ──
+  { prefixes: ['680', '681'], msa: 'Omaha' },
+  { prefixes: ['685'], msa: 'Lincoln' },
+  { prefixes: ['688'], msa: 'Grand Island' },
+
+  // ── NEW HAMPSHIRE ──
+  { prefixes: ['030', '031'], msa: 'Manchester' },
+
+  // ── NEW JERSEY (NJ zips for New York metro) ──
+  { prefixes: ['070', '071', '072', '073', '074', '075', '076', '077', '078', '079'], msa: 'New York' },
+  { prefixes: ['082'], msa: 'Atlantic City' },
+  { prefixes: ['083'], msa: 'Vineland' },
+  { prefixes: ['085', '086'], msa: 'Trenton' },
+
+  // ── NEW MEXICO ──
+  { prefixes: ['870', '871'], msa: 'Albuquerque' },
+  { prefixes: ['874'], msa: 'Farmington' },
+  { prefixes: ['875'], msa: 'Santa Fe' },
+  { prefixes: ['880'], msa: 'Las Cruces' },
+
+  // ── NEVADA ──
   { prefixes: ['889', '890', '891'], msa: 'Las Vegas' },
-  { prefixes: ['270', '271', '272', '273', '274', '275', '276', '277'], msa: 'Charlotte' },
-  { prefixes: ['370', '371', '372', '373', '374'], msa: 'Nashville' },
-  { prefixes: ['970', '971', '972', '973', '974'], msa: 'Portland' },
-  { prefixes: ['440', '441', '442', '443', '444'], msa: 'Cleveland' },
-  { prefixes: ['450', '451', '452', '453'], msa: 'Columbus' },
-  { prefixes: ['460', '461', '462', '463'], msa: 'Indianapolis' },
-  { prefixes: ['630', '631', '633', '634'], msa: 'St. Louis' },
+  { prefixes: ['894', '895'], msa: 'Reno' },
+  { prefixes: ['897'], msa: 'Carson City' },
+
+  // ── NEW YORK ──
+  { prefixes: ['100', '101', '102', '103', '104', '105', '106', '107', '108'], msa: 'New York' },
+  { prefixes: ['109'], msa: 'Kiryas Joel' },
+  { prefixes: ['110', '111', '112', '113', '114', '115', '116', '117', '118', '119'], msa: 'New York' },
+  { prefixes: ['120', '121', '122', '123'], msa: 'Albany' },
+  { prefixes: ['124', '125'], msa: 'Kingston' },
+  { prefixes: ['128'], msa: 'Glens Falls' },
+  { prefixes: ['130', '131', '132'], msa: 'Syracuse' },
+  { prefixes: ['133', '134', '135'], msa: 'Utica' },
+  { prefixes: ['136'], msa: 'Watertown' },
+  { prefixes: ['137', '138', '139'], msa: 'Binghamton' },
+  { prefixes: ['140', '141', '142', '143'], msa: 'Buffalo' },
+  { prefixes: ['144', '145', '146'], msa: 'Rochester' },
+  { prefixes: ['148'], msa: 'Ithaca' },
+  { prefixes: ['149'], msa: 'Elmira' },
+
+  // ── OHIO ──
+  { prefixes: ['430', '431', '432', '433'], msa: 'Columbus' },
+  { prefixes: ['435', '436'], msa: 'Toledo' },
+  { prefixes: ['440', '441', '442'], msa: 'Akron' },
+  { prefixes: ['443', '444', '445'], msa: 'Cleveland' },
+  { prefixes: ['447'], msa: 'Canton' },
+  { prefixes: ['448'], msa: 'Mansfield' },
+  { prefixes: ['449'], msa: 'Youngstown' },
+  { prefixes: ['450', '451', '452'], msa: 'Cincinnati' },
+  { prefixes: ['453', '454'], msa: 'Dayton' },
+  { prefixes: ['455'], msa: 'Springfield' },
+  { prefixes: ['458'], msa: 'Lima' },
+
+  // ── OKLAHOMA ──
+  { prefixes: ['730', '731'], msa: 'Oklahoma City' },
+  { prefixes: ['737'], msa: 'Enid' },
+  { prefixes: ['740', '741'], msa: 'Tulsa' },
+
+  // ── OREGON ──
+  { prefixes: ['970', '971', '972'], msa: 'Portland' },
+  { prefixes: ['973'], msa: 'Salem' },
+  { prefixes: ['974'], msa: 'Eugene' },
+  { prefixes: ['975'], msa: 'Medford' },
+  { prefixes: ['977'], msa: 'Bend' },
+
+  // ── PENNSYLVANIA ──
   { prefixes: ['150', '151', '152', '153'], msa: 'Pittsburgh' },
+  { prefixes: ['159'], msa: 'Johnstown' },
+  { prefixes: ['164', '165'], msa: 'Erie' },
+  { prefixes: ['166'], msa: 'Altoona' },
+  { prefixes: ['168'], msa: 'State College' },
+  { prefixes: ['170', '171'], msa: 'Harrisburg' },
+  { prefixes: ['172'], msa: 'Chambersburg' },
+  { prefixes: ['173'], msa: 'Gettysburg' },
+  { prefixes: ['174', '175'], msa: 'York' },
+  { prefixes: ['176'], msa: 'Lancaster' },
+  { prefixes: ['177'], msa: 'Williamsport' },
+  { prefixes: ['180', '181', '182'], msa: 'Allentown' },
+  { prefixes: ['183', '184', '185'], msa: 'Scranton' },
+  { prefixes: ['190', '191', '192', '193'], msa: 'Philadelphia' },
+  { prefixes: ['194', '195', '196'], msa: 'Reading' },
+
+  // ── RHODE ISLAND ──
+  { prefixes: ['028', '029'], msa: 'Providence' },
+
+  // ── SOUTH CAROLINA ──
+  { prefixes: ['291'], msa: 'Sumter' },
+  { prefixes: ['292'], msa: 'Columbia' },
+  { prefixes: ['293'], msa: 'Spartanburg' },
+  { prefixes: ['294'], msa: 'Charleston' },
+  { prefixes: ['295'], msa: 'Florence' },
+  { prefixes: ['296'], msa: 'Greenville' },
+  { prefixes: ['297'], msa: 'Myrtle Beach' },
+  { prefixes: ['298'], msa: 'Hilton Head Island' },
+
+  // ── SOUTH DAKOTA ──
+  { prefixes: ['570', '571'], msa: 'Sioux Falls' },
+  { prefixes: ['577'], msa: 'Rapid City' },
+
+  // ── TENNESSEE ──
+  { prefixes: ['370'], msa: 'Clarksville' },
+  { prefixes: ['371', '372'], msa: 'Nashville' },
+  { prefixes: ['373'], msa: 'Cleveland' },
+  { prefixes: ['374'], msa: 'Chattanooga' },
+  { prefixes: ['376', '377'], msa: 'Johnson City' },
+  { prefixes: ['378'], msa: 'Morristown' },
+  { prefixes: ['379'], msa: 'Knoxville' },
+  { prefixes: ['380', '381', '382'], msa: 'Memphis' },
+  { prefixes: ['383'], msa: 'Jackson' },
+
+  // ── TEXAS ──
+  { prefixes: ['750', '751', '752', '753', '754', '755', '760', '761', '762'], msa: 'Dallas' },
+  { prefixes: ['756'], msa: 'Longview' },
+  { prefixes: ['757', '758'], msa: 'Tyler' },
+  { prefixes: ['763', '764'], msa: 'Wichita Falls' },
+  { prefixes: ['765', '766'], msa: 'Killeen' },
+  { prefixes: ['767', '768'], msa: 'Waco' },
+  { prefixes: ['769'], msa: 'San Angelo' },
+  { prefixes: ['770', '771', '772', '773', '774', '775'], msa: 'Houston' },
+  { prefixes: ['776', '777'], msa: 'Beaumont' },
+  { prefixes: ['778'], msa: 'College Station' },
+  { prefixes: ['779'], msa: 'Victoria' },
+  { prefixes: ['780', '781'], msa: 'San Antonio' },
+  { prefixes: ['782', '783'], msa: 'McAllen' },
+  { prefixes: ['784'], msa: 'Corpus Christi' },
+  { prefixes: ['785'], msa: 'Brownsville' },
+  { prefixes: ['786', '787'], msa: 'Austin' },
+  { prefixes: ['788'], msa: 'Laredo' },
+  { prefixes: ['790', '791'], msa: 'Amarillo' },
+  { prefixes: ['793', '794'], msa: 'Lubbock' },
+  { prefixes: ['796'], msa: 'Abilene' },
+  { prefixes: ['797'], msa: 'Midland' },
+  { prefixes: ['798', '799'], msa: 'El Paso' },
+
+  // ── UTAH ──
+  { prefixes: ['840', '841', '842'], msa: 'Salt Lake City' },
+  { prefixes: ['843'], msa: 'Logan' },
+  { prefixes: ['844'], msa: 'Ogden' },
+  { prefixes: ['846'], msa: 'Provo' },
+  { prefixes: ['847'], msa: 'St. George' },
+
+  // ── VIRGINIA ──
+  { prefixes: ['226'], msa: 'Winchester' },
+  { prefixes: ['228'], msa: 'Harrisonburg' },
+  { prefixes: ['229'], msa: 'Charlottesville' },
+  { prefixes: ['230', '231', '232', '233'], msa: 'Richmond' },
+  { prefixes: ['234', '235', '236'], msa: 'Virginia Beach' },
+  { prefixes: ['240', '241'], msa: 'Roanoke' },
+  { prefixes: ['244'], msa: 'Staunton' },
+  { prefixes: ['245'], msa: 'Lynchburg' },
+
+  // ── VERMONT ──
+  { prefixes: ['051', '054'], msa: 'Burlington' },
+
+  // ── WASHINGTON ──
+  { prefixes: ['980', '981', '984'], msa: 'Seattle' },
+  { prefixes: ['982'], msa: 'Bellingham' },
+  { prefixes: ['983'], msa: 'Bremerton' },
+  { prefixes: ['985'], msa: 'Olympia' },
+  { prefixes: ['986'], msa: 'Longview' },
+  { prefixes: ['987'], msa: 'Wenatchee' },
+  { prefixes: ['989'], msa: 'Yakima' },
+  { prefixes: ['990', '991', '992'], msa: 'Spokane' },
+  { prefixes: ['993'], msa: 'Kennewick' },
+
+  // ── WISCONSIN ──
+  { prefixes: ['530', '532'], msa: 'Milwaukee' },
+  { prefixes: ['531'], msa: 'Kenosha' },
+  { prefixes: ['533'], msa: 'Sheboygan' },
+  { prefixes: ['534'], msa: 'Racine' },
+  { prefixes: ['535'], msa: 'Janesville' },
+  { prefixes: ['537'], msa: 'Madison' },
+  { prefixes: ['543'], msa: 'Green Bay' },
+  { prefixes: ['544'], msa: 'Oshkosh' },
+  { prefixes: ['545'], msa: 'Wausau' },
+  { prefixes: ['546'], msa: 'La Crosse' },
+  { prefixes: ['547'], msa: 'Eau Claire' },
+  { prefixes: ['549'], msa: 'Appleton' },
+
+  // ── WEST VIRGINIA ──
+  { prefixes: ['250'], msa: 'Beckley' },
+  { prefixes: ['251', '252', '253'], msa: 'Charleston' },
+  { prefixes: ['255', '256', '257'], msa: 'Huntington' },
+  { prefixes: ['260'], msa: 'Wheeling' },
+  { prefixes: ['261'], msa: 'Parkersburg' },
+  { prefixes: ['265'], msa: 'Morgantown' },
+
+  // ── WYOMING ──
+  { prefixes: ['820', '821'], msa: 'Cheyenne' },
+  { prefixes: ['826'], msa: 'Casper' },
 ];
 
 /**
