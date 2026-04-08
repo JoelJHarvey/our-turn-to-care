@@ -767,7 +767,7 @@ function transformRow(row: any): CostData {
     stateName: row.state_name,
     areaName: row.area_name,
     locationLabel: row.level === 'msa'
-      ? row.area_name || row.full_name
+      ? (row.area_name || row.full_name || '').replace(/ Area$/, '')
       : row.state_name,
 
     // Monthly costs

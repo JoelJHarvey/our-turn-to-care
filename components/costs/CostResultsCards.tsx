@@ -127,7 +127,7 @@ export function CostResultsCards({
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-slate-800">
-          Care costs near {locationLabel || stateName || `zip ${zip}`}
+          Estimated Care Costs in the {locationLabel || stateName || `zip ${zip}`} Area
         </h2>
         <p className="text-sm text-slate-500 mt-1">
           {hasMsaData
