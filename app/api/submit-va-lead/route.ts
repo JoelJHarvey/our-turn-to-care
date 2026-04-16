@@ -8,7 +8,7 @@
  *   First Name              (Single line text)
  *   Last Name               (Single line text)
  *   Email                   (Email)
- *   Phone                   (Phone number)
+ *   Phone Number            (Phone number)
  *   State                   (Single line text)
  *   Veteran Status          (Single line text)
  *   Service Period          (Single line text)
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     "First Name": firstName.trim(),
     "Last Name": lastName.trim(),
     "Email": email.trim(),
-    "Phone": body.phone?.trim() ?? "",
+    "Phone Number": body.phone?.trim() ?? "",
     "State": body.state ?? "",
     "Veteran Status": body.veteranStatus ?? "",
     "Service Period": body.servicePeriod ?? "",
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ records: [{ fields }] }),
+        body: JSON.stringify({ records: [{ fields }], typecast: true }),
       }
     );
   } catch (err) {
@@ -109,12 +109,24 @@ export async function POST(request: NextRequest) {
 
   if (!airtableResponse.ok) {
     const errorBody = await airtableResponse.text();
-    console.error(`Airtable error ${airtableResponse.status}:`, errorBody);
+    console.error("[submit-va-lead] Airtable rejected request", {
+      status: airtableResponse.status,
+      statusText: airtableResponse.statusText,
+      body: errorBody,
+    });
     return NextResponse.json(
-      { error: "Could not save your information. Please try again." },
-      { status: 500 }
+      {
+        ok: false,
+        error: "airtable_rejected",
+        detail: errorBody,
+        status: airtableResponse.status,
+      },
+      { status: 502 }
     );
   }
 
-  return NextResponse.json({ success: true }, { status: 200 });
+  const created = await airtableResponse.json() as { records?: Array<{ id: string }> };
+  const leadId = created.records?.[0]?.id ?? null;
+  console.log("[submit-va-lead] Lead saved successfully", { leadId, email: body.email });
+  return NextResponse.json({ ok: true, lead_id: leadId }, { status: 200 });
 }

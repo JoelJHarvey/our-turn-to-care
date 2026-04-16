@@ -14,7 +14,7 @@
  *   First Name              (Single line text)
  *   Last Name               (Single line text)
  *   Email                   (Email)
- *   Phone                   (Phone number)
+ *   Phone Number            (Phone number)
  *   Care Recipient Name     (Single line text)
  *   Relationship            (Single line text)
  *   Age Range               (Single line text)
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
     "First Name": firstName.trim(),
     "Last Name": lastName.trim(),
     "Email": email.trim(),
-    "Phone": body.phone?.trim() ?? "",
+    "Phone Number": body.phone?.trim() ?? "",
     "Care Recipient Name": body.careRecipientName ?? "",
     "Relationship": body.relationship,
     "Age Range": body.ageRange,
@@ -167,33 +167,40 @@ export async function POST(request: NextRequest) {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ records: [{ fields }] }),
+        body: JSON.stringify({ records: [{ fields }], typecast: true }),
       }
     );
   } catch (err) {
     // Network-level failure (DNS, timeout, etc.)
-    console.error("Airtable network error:", err);
+    console.error("[submit-lead] Airtable network error:", err);
     return NextResponse.json(
-      { error: "Could not reach the database. Please try again." },
+      { ok: false, error: "network_error", detail: String(err) },
       { status: 500 }
     );
   }
 
   // ── Handle Airtable errors ───────────────────────────────────────────────
   if (!airtableResponse.ok) {
-    // Log the full Airtable error server-side for debugging, but return a
-    // generic message to the client so we don't leak internal details.
     const errorBody = await airtableResponse.text();
-    console.error(
-      `Airtable error ${airtableResponse.status}:`,
-      errorBody
-    );
+    console.error("[submit-lead] Airtable rejected request", {
+      status: airtableResponse.status,
+      statusText: airtableResponse.statusText,
+      body: errorBody,
+    });
     return NextResponse.json(
-      { error: "Could not save your information. Please try again." },
-      { status: 500 }
+      {
+        ok: false,
+        error: "airtable_rejected",
+        detail: errorBody,
+        status: airtableResponse.status,
+      },
+      { status: 502 }
     );
   }
 
   // ── Success ──────────────────────────────────────────────────────────────
-  return NextResponse.json({ success: true }, { status: 200 });
+  const created = await airtableResponse.json() as { records?: Array<{ id: string }> };
+  const leadId = created.records?.[0]?.id ?? null;
+  console.log("[submit-lead] Lead saved successfully", { leadId, email: body.email });
+  return NextResponse.json({ ok: true, lead_id: leadId }, { status: 200 });
 }
