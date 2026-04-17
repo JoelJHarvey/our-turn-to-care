@@ -327,6 +327,12 @@ function ResultsScreen({
             checkboxLabel="I'm also interested in financial planning assistance (Medicaid, VA benefits, etc.)"
             successTitle="You're all set!"
             successBody={`We're finding care providers and financial planning resources near ${zip}. Check your email for personalized recommendations.`}
+            onSuccess={() => {
+              const params = new URLSearchParams({
+                ...(zip && { zip }),
+              });
+              window.location.href = `/tools/cost-calculator/thank-you?${params.toString()}`;
+            }}
           />
         </section>
 

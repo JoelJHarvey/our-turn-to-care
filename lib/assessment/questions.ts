@@ -142,7 +142,7 @@ export const questions: Question[] = [
         value: "forgetting",
       },
       {
-        label: "Getting confused about the time, date, or where they are",
+        label: "Getting confused about time, date, or {possessive} current location",
         value: "confusion",
       },
       {
@@ -176,7 +176,7 @@ export const questions: Question[] = [
   // ── Screen 5: Safety Concerns ─────────────────────────────────────────────
   {
     id: "safety",
-    question: "Have any of these happened in the last 6 months?",
+    question: "Have any of these happened to {person} in the last 6 months?",
     questionVariants: {
       self: "Have any of these happened to you in the last 6 months?",
     },
@@ -216,7 +216,7 @@ export const questions: Question[] = [
       self: "Where do you currently live?",
     },
     options: [
-      { label: "Alone in their own home", value: "alone" },
+      { label: "Alone in {possessive} own home", value: "alone" },
       { label: "With a spouse or partner", value: "with_spouse" },
       { label: "With me or another family member", value: "with_family" },
       {
@@ -264,10 +264,7 @@ export const questions: Question[] = [
     questionVariants: {
       self: "What is your zip code?",
     },
-    subtext: "This helps us show you care options and costs in their area.",
-    subtextVariants: {
-      self: "This helps us show you care options and costs in your area.",
-    },
+    subtext: "This helps us show you care options and costs in {possessive} area.",
     options: [],
     multiSelect: false,
     screenType: "zip",
@@ -286,7 +283,7 @@ export const questions: Question[] = [
     options: [],
     multiSelect: false,
     screenType: "transition",
-    progress: 63,
+    progress: 65,
   },
 
   // ── Screen 8: Veteran Status ──────────────────────────────────────────────
@@ -371,7 +368,7 @@ export const questions: Question[] = [
         value: "significant_savings",
       },
       {
-        label: "I'm not sure about their finances",
+        label: "I'm not sure about {possessive} finances",
         value: "not_sure",
       },
     ],
@@ -421,7 +418,7 @@ export const questions: Question[] = [
       { label: "VA health benefits", value: "va_benefits" },
       { label: "Private health insurance", value: "private_insurance" },
       { label: "Long-term care insurance", value: "ltc_insurance" },
-      { label: "I'm not sure what they have", value: "not_sure" },
+      { label: "I'm not sure about {possessive} coverage", value: "not_sure" },
       { label: "None / uninsured", value: "none" },
     ],
     // Self path: update "they have" → "I have" on the uncertain option

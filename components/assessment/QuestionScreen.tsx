@@ -10,6 +10,7 @@ interface QuestionScreenProps {
   options: Option[];
   multiSelect: boolean;
   progress: number;
+  progressLabel?: string;
   personLabel: string;
   pronoun: string;
   possessive: string;
@@ -32,6 +33,7 @@ export default function QuestionScreen({
   options,
   multiSelect,
   progress,
+  progressLabel,
   personLabel,
   pronoun,
   possessive,
@@ -82,14 +84,14 @@ export default function QuestionScreen({
   const canProceed = selected.length > 0;
 
   return (
-    <div className="flex flex-col min-h-screen bg-white px-5 pt-6 pb-8 max-w-lg mx-auto w-full">
+    <div className="bg-white px-5 pt-6 pb-8 max-w-lg mx-auto w-full">
       {/* Progress */}
       <div className="mb-8">
-        <ProgressBar progress={progress} />
+        <ProgressBar progress={progress} label={progressLabel} />
       </div>
 
       {/* Question text */}
-      <div className="flex-1">
+      <div>
         <h2 className="text-2xl font-semibold text-slate-800 leading-snug mb-3">
           {sub(question)}
         </h2>
@@ -185,7 +187,7 @@ export default function QuestionScreen({
         )}
       </div>
 
-      {/* Navigation */}
+      {/* Navigation — flows naturally below the last option */}
       <div className="mt-8 flex flex-col gap-3">
         <button
           onClick={() => {
@@ -205,7 +207,7 @@ export default function QuestionScreen({
         <div className="flex items-center justify-between">
           <button
             onClick={onBack}
-            className="text-slate-500 text-sm font-medium py-3 px-1 hover:text-slate-700 transition-colors"
+            className="text-gray-600 text-base font-medium py-3 px-3 min-h-[44px] hover:text-slate-800 transition-colors"
           >
             ← Back
           </button>
@@ -215,7 +217,7 @@ export default function QuestionScreen({
             // distinguish "skipped" from "no answer given"
             <button
               onClick={() => onNext(["skip"])}
-              className="text-slate-400 text-sm font-medium py-3 px-1 hover:text-slate-600 transition-colors"
+              className="text-gray-600 text-base font-medium py-3 px-3 min-h-[44px] hover:text-slate-800 transition-colors"
             >
               Skip this question
             </button>

@@ -10,6 +10,8 @@ interface ToolLeadFormProps {
   successBody?: string;
   checkboxLabel?: string;
   showStateField?: boolean;
+  /** Called with the submitted first name on success. Use for redirects to thank-you pages. */
+  onSuccess?: (firstName: string) => void;
 }
 
 interface FormData {
@@ -29,6 +31,7 @@ export default function ToolLeadForm({
   successBody = "We'll be in touch shortly.",
   checkboxLabel,
   showStateField = false,
+  onSuccess,
 }: ToolLeadFormProps) {
   const [form, setForm] = useState<FormData>({
     firstName: "",
@@ -77,13 +80,18 @@ export default function ToolLeadForm({
           ...extraPayload,
         }),
       });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+      const data = await res.json().catch(() => ({})) as { ok?: boolean; error?: string; detail?: string };
+      if (!res.ok || data.ok === false) {
+        if (data.detail) console.error("[ToolLeadForm] Server detail:", data.detail);
         throw new Error(
-          (data as { error?: string }).error ?? "Something went wrong. Please try again."
+          "Could not save your information. Please try again, or email us at hello@ourturntocare.com."
         );
       }
-      setSubmitted(true);
+      if (onSuccess) {
+        onSuccess(form.firstName.trim());
+      } else {
+        setSubmitted(true);
+      }
     } catch (err) {
       setSubmitError(
         err instanceof Error ? err.message : "Something went wrong. Please try again."

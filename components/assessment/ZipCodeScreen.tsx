@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import ProgressBar from "./ProgressBar";
 
 interface ZipCodeScreenProps {
   question: string;
   subtext?: string;
   progress: number;
+  progressLabel?: string;
   personLabel: string;
+  possessive: string;
   onNext: (values: string[]) => void;
   onBack: () => void;
   // Pre-fills the input if the user navigates back to this screen
@@ -18,32 +20,25 @@ export default function ZipCodeScreen({
   question,
   subtext,
   progress,
+  progressLabel,
   personLabel,
+  possessive,
   onNext,
   onBack,
   initialValue = "",
 }: ZipCodeScreenProps) {
   const [zip, setZip] = useState(initialValue);
   const [error, setError] = useState("");
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Keep a ref so we can cancel any pending auto-focus timers
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const displayQuestion = question.replace(/\{person\}/g, personLabel);
+  // Apply {person} and {possessive} placeholders
+  const sub = (text: string) =>
+    text
+      .replace(/\{person\}/g, personLabel)
+      .replace(/\{possessive\}/g, possessive);
 
   const isValid = /^\d{5}$/.test(zip);
-
-  // Auto-advance 300 ms after the 5th digit is entered. The Next button
-  // remains visible as a fallback for paste/autofill edge cases.
-  useEffect(() => {
-    if (isValid) {
-      timerRef.current = setTimeout(() => onNext([zip]), 300);
-    }
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-    // onNext is recreated each render but this component is keyed by screen,
-    // so the closure is always fresh and excluding it from deps is safe.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zip, isValid]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Strip anything that isn't a digit, then cap at 5 characters
@@ -54,7 +49,6 @@ export default function ZipCodeScreen({
 
   const handleNext = () => {
     if (isValid) {
-      if (timerRef.current) clearTimeout(timerRef.current);
       onNext([zip]);
     } else {
       setError("Please enter a valid 5-digit zip code");
@@ -62,21 +56,21 @@ export default function ZipCodeScreen({
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white px-5 pt-6 pb-8 max-w-lg mx-auto w-full">
+    <div className="bg-white px-5 pt-6 pb-8 max-w-lg mx-auto w-full">
       {/* Progress */}
       <div className="mb-8">
-        <ProgressBar progress={progress} />
+        <ProgressBar progress={progress} label={progressLabel} />
       </div>
 
       {/* Question text */}
-      <div className="flex-1">
+      <div>
         <h2 className="text-2xl font-semibold text-slate-800 leading-snug mb-3">
-          {displayQuestion}
+          {sub(question)}
         </h2>
 
         {subtext && (
           <p className="text-base text-slate-500 leading-relaxed mb-10">
-            {subtext}
+            {sub(subtext)}
           </p>
         )}
         {!subtext && <div className="mb-10" />}
@@ -85,6 +79,7 @@ export default function ZipCodeScreen({
         <div className="flex flex-col items-center">
           <div className="w-full max-w-[220px]">
             <input
+              ref={inputRef}
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
@@ -92,6 +87,9 @@ export default function ZipCodeScreen({
               placeholder="00000"
               value={zip}
               onChange={handleChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && isValid) handleNext();
+              }}
               maxLength={5}
               aria-label="Zip code"
               aria-describedby={error ? "zip-error" : undefined}
@@ -128,13 +126,13 @@ export default function ZipCodeScreen({
         </div>
       </div>
 
-      {/* Navigation */}
+      {/* Navigation — flows naturally below content */}
       <div className="mt-8 flex flex-col gap-3">
         <button
           onClick={handleNext}
           className={[
             "w-full py-4 rounded-xl text-base font-semibold transition-all duration-150",
-            zip.length === 5
+            isValid
               ? "bg-teal-600 text-white hover:bg-teal-700 active:bg-teal-800 shadow-sm"
               : "bg-slate-100 text-slate-400 cursor-not-allowed",
           ].join(" ")}
@@ -145,7 +143,7 @@ export default function ZipCodeScreen({
         <div className="flex items-center">
           <button
             onClick={onBack}
-            className="text-slate-500 text-sm font-medium py-3 px-1 hover:text-slate-700 transition-colors"
+            className="text-gray-600 text-base font-medium py-3 px-3 min-h-[44px] hover:text-slate-800 transition-colors"
           >
             ← Back
           </button>

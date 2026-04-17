@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AssessmentResults } from "@/lib/assessment/scoring";
+import { trackAssessmentEvent, trackServerEvent } from "@/lib/analytics";
 
 interface LeadCaptureFormProps {
   zipCode: string;
@@ -114,15 +115,42 @@ export default function LeadCaptureForm({
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+      const data = await res.json().catch(() => ({})) as { ok?: boolean; error?: string; detail?: string };
+      if (!res.ok || data.ok === false) {
+        // Surface the real Airtable error in the dev console for debugging
+        if (data.detail) console.error("[LeadCaptureForm] Server detail:", data.detail);
         throw new Error(
-          (data as { error?: string }).error ??
-            "Something went wrong. Please try again."
+          data.error === "missing_fields"
+            ? "Please fill in all required fields."
+            : "Could not save your information. Please try again, or email us at hello@ourturntocare.com."
         );
       }
 
-      setSubmitted(true);
+      // Fire analytics before navigating away
+      trackAssessmentEvent("assessment_lead_submitted", {
+        primary_recommendation: results.primaryRecommendation,
+        financial_assistance_checked: form.wantsFinancialInfo,
+        va_eligible: results.vaEligibleFlag,
+        medicaid_likely: results.medicaidLikelyFlag,
+        has_ltc_insurance: results.hasLtcInsurance,
+        zip_code: results.zipCode,
+      });
+      await trackServerEvent("lead_submitted", {
+        primary_recommendation: results.primaryRecommendation,
+        financial_assistance_checked: form.wantsFinancialInfo,
+        zip_code: results.zipCode,
+        va_eligible: results.vaEligibleFlag,
+        medicaid_likely: results.medicaidLikelyFlag,
+        has_ltc_insurance: results.hasLtcInsurance,
+      });
+
+      // Redirect to thank-you page with context for personalization
+      const params = new URLSearchParams({
+        rec: results.primaryRecommendation,
+        zip: results.zipCode || "",
+        fa: form.wantsFinancialInfo ? "1" : "0",
+      });
+      window.location.href = `/tools/care-assessment/thank-you?${params.toString()}`;
     } catch (err) {
       console.error("Lead submission error:", err);
       setSubmitError(

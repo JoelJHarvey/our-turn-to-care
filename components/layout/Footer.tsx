@@ -1,10 +1,17 @@
 import Link from "next/link";
 
+const TOOLS_LINKS = [
+  { label: "Care Assessment", href: "/tools/care-assessment" },
+  { label: "Cost Calculator", href: "/tools/cost-calculator" },
+  { label: "Medicaid Screener", href: "/tools/medicaid-screener" },
+  { label: "VA Benefits Eligibility", href: "/tools/va-benefits" },
+];
+
 export default function Footer() {
   return (
     <footer className="bg-slate-50 border-t border-slate-200">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
           {/* Column 1: Brand + tagline + site links */}
           <div>
             <p className="text-lg font-bold text-slate-800 mb-2">OurTurnToCare</p>
@@ -13,7 +20,6 @@ export default function Footer() {
             </p>
             <ul className="flex flex-col gap-2">
               {[
-                { label: "Care Assessment", href: "/tools/care-assessment" },
                 { label: "About Us", href: "#" },
                 { label: "Privacy Policy", href: "#" },
                 { label: "Terms of Service", href: "#" },
@@ -30,7 +36,26 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 2: Care Guides */}
+          {/* Column 2: Caregiver Tools */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+              Caregiver Tools
+            </p>
+            <ul className="flex flex-col gap-2">
+              {TOOLS_LINKS.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-slate-600 hover:text-teal-700 transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Care Guides */}
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
               Care Guides
@@ -55,7 +80,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Contact */}
+          {/* Column 4: Contact */}
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
               Contact

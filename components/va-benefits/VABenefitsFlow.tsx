@@ -526,6 +526,13 @@ function VAResultsScreen({
             showStateField
             successTitle="We'll connect you with a specialist"
             successBody="A VA-accredited claims agent will be in touch to help you navigate the application process."
+            onSuccess={() => {
+              const params = new URLSearchParams({
+                ...(benefits.aidAndAttendance && { benefit: "aid_attendance" }),
+                ...(benefits.aidAndAttendance && { est: showAmount }),
+              });
+              window.location.href = `/tools/va-benefits/thank-you?${params.toString()}`;
+            }}
           />
         </section>
 

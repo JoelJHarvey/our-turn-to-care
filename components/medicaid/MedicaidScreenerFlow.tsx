@@ -634,6 +634,13 @@ function ResultsScreen({
             extraPayload={extraPayload}
             successTitle="We'll be in touch soon"
             successBody={`A Medicaid planning specialist will reach out to discuss ${personLabel}'s options in ${stateName}.`}
+            onSuccess={() => {
+              const params = new URLSearchParams({
+                ...(eligibility && { result: eligibility }),
+                ...(answers.state && { state: stateName }),
+              });
+              window.location.href = `/tools/medicaid-screener/thank-you?${params.toString()}`;
+            }}
           />
         </section>
 

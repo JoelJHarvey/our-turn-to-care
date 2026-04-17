@@ -1,6 +1,15 @@
 /**
- * Facility Data Service
- * Search, filter, and retrieve senior care facilities from Supabase
+ * UPDATE 1 — Replace the ENTIRE contents of src/lib/facilities.ts with this file.
+ *
+ * What changed:
+ * - getFacilityCountsByState now uses supabase.rpc() instead of fetching all rows
+ *   (fixes the bug where it showed 1,000 instead of 6,531)
+ * - getDistinctCitiesByState now uses supabase.rpc() instead of fetching all rows
+ *   (fixes the same 1,000 row limit bug for city lists)
+ *
+ * PREREQUISITE: You must have run these two SQL functions in Supabase first:
+ *   - get_facility_counts_by_state (already done)
+ *   - get_distinct_cities_by_state (new — run it before deploying this)
  */
 
 import { supabase } from './supabase';
@@ -203,7 +212,10 @@ export async function searchFacilitiesByStateAndCity(
   }
 }
 
-/** Get facility counts by type for a state */
+/**
+ * Get facility counts by type for a state
+ * Uses RPC to bypass Supabase's default 1,000 row limit
+ */
 export async function getFacilityCountsByState(state: string): Promise<{
   all: number; nursing_home: number; assisted_living: number;
   home_health: number; hospice: number; adult_day: number;
@@ -211,19 +223,19 @@ export async function getFacilityCountsByState(state: string): Promise<{
   const defaults = { all: 0, nursing_home: 0, assisted_living: 0, home_health: 0, hospice: 0, adult_day: 0 };
 
   try {
-    const { data, error } = await supabase
-      .from('facilities')
-      .select('facility_type')
-      .eq('state', state.toUpperCase())
-      .eq('is_active', true);
+    const { data, error } = await supabase.rpc('get_facility_counts_by_state', {
+      state_code: state.toUpperCase(),
+    });
 
     if (error || !data) return defaults;
 
-    const counts = { ...defaults, all: data.length };
-    data.forEach((f) => {
-      if (f.facility_type in counts) {
-        counts[f.facility_type as keyof typeof counts]++;
+    const counts = { ...defaults };
+    data.forEach((row: { facility_type: string; count: number }) => {
+      const type = row.facility_type as keyof typeof counts;
+      if (type in counts && type !== 'all') {
+        counts[type] = Number(row.count);
       }
+      counts.all += Number(row.count);
     });
     return counts;
   } catch (error) {
@@ -231,21 +243,19 @@ export async function getFacilityCountsByState(state: string): Promise<{
   }
 }
 
-/** Get all distinct cities in a state (for generating static paths) */
+/**
+ * Get all distinct cities in a state (for generating static paths)
+ * Uses RPC to bypass Supabase's default 1,000 row limit
+ */
 export async function getDistinctCitiesByState(state: string): Promise<string[]> {
   try {
-    const { data, error } = await supabase
-      .from('facilities')
-      .select('city')
-      .eq('state', state.toUpperCase())
-      .eq('is_active', true);
+    const { data, error } = await supabase.rpc('get_distinct_cities_by_state', {
+      state_code: state.toUpperCase(),
+    });
 
     if (error || !data) return [];
 
-    const uniqueCities = Array.from(
-      new Set(data.map((f) => normalizeCityName(f.city)).filter(Boolean))
-    );
-    return uniqueCities.sort();
+    return data.map((row: { city: string }) => row.city).filter(Boolean).sort();
   } catch (error) {
     return [];
   }
@@ -304,6 +314,169 @@ export function cityToSlug(city: string): string {
 
 export function slugToCity(slug: string): string {
   return slug.split('-').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
+export interface FacilityListItem {
+  facility_id: string;
+  facility_name: string;
+  facility_type: string;
+  city: string;
+  county: string | null;
+  state: string;
+  zip_code: string;
+  address_line_1: string;
+  phone: string | null;
+  bed_count: number | null;
+  overall_rating: number | null;
+  health_inspection_rating: number | null;
+  staffing_rating: number | null;
+  quality_measure_rating: number | null;
+  accepts_medicare: boolean;
+  accepts_medicaid: boolean;
+  latitude: number;
+  longitude: number;
+  distance_miles: number | null;
+  total_count: number;
+}
+
+export interface FacilityListResult {
+  facilities: FacilityListItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  pages: number;
+}
+
+/**
+ * Paginated facility listing by state and type.
+ * Uses the get_facilities_by_state_and_type RPC.
+ * For memory care pass isMemoryCare=true and omit facilityType — the caller
+ * should use the get_memory_care_facilities_by_state RPC directly instead.
+ */
+export async function fetchFacilitiesByStateAndType(
+  state: string,
+  facilityType: string,
+  {
+    page = 1,
+    pageSize = 20,
+    sortBy = 'city',
+    lat,
+    lon,
+    radiusMeters,
+  }: {
+    page?: number;
+    pageSize?: number;
+    sortBy?: 'city' | 'rating' | 'distance';
+    lat?: number;
+    lon?: number;
+    radiusMeters?: number;
+  } = {}
+): Promise<FacilityListResult> {
+  const empty: FacilityListResult = { facilities: [], total: 0, page, pageSize, pages: 0 };
+
+  try {
+    const { data, error } = await supabase.rpc('get_facilities_by_state_and_type', {
+      state_code: state.toUpperCase(),
+      facility_type_filter: facilityType,
+      page_num: page,
+      page_size: pageSize,
+      sort_by: sortBy,
+      lat: lat ?? null,
+      lon: lon ?? null,
+      radius_meters: radiusMeters ?? null,
+    });
+
+    if (error) {
+      console.error('get_facilities_by_state_and_type error:', error);
+      return empty;
+    }
+
+    const rows = (data ?? []) as FacilityListItem[];
+    const total = rows.length > 0 ? Number(rows[0].total_count) : 0;
+
+    return {
+      facilities: rows,
+      total,
+      page,
+      pageSize,
+      pages: Math.ceil(total / pageSize),
+    };
+  } catch (err) {
+    console.error('fetchFacilitiesByStateAndType error:', err);
+    return empty;
+  }
+}
+
+/**
+ * Look up approximate lat/lon for a zip code using our facilities table.
+ * Returns null if no facility is found in that zip.
+ */
+export async function getLatLonForZip(
+  zip: string
+): Promise<{ lat: number; lon: number } | null> {
+  try {
+    const { data, error } = await supabase
+      .from('facilities')
+      .select('latitude, longitude')
+      .eq('zip_code', zip)
+      .eq('is_active', true)
+      .limit(1)
+      .single();
+
+    if (error || !data) return null;
+    return { lat: data.latitude, lon: data.longitude };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Paginated memory-care facility listing.
+ * Uses the get_memory_care_facilities_by_state RPC (which filters by
+ * Alzheimer / dementia certification indicators across nursing_home +
+ * assisted_living facility types).
+ */
+export async function fetchMemoryCareFacilities(
+  state: string,
+  {
+    page = 1,
+    pageSize = 20,
+    sortBy = 'city',
+  }: {
+    page?: number;
+    pageSize?: number;
+    sortBy?: 'city' | 'rating' | 'name';
+  } = {}
+): Promise<FacilityListResult> {
+  const empty: FacilityListResult = { facilities: [], total: 0, page, pageSize, pages: 0 };
+
+  try {
+    const { data, error } = await supabase.rpc('get_memory_care_facilities_by_state', {
+      state_code: state.toUpperCase(),
+      page_num: page,
+      page_size: pageSize,
+      sort_by: sortBy,
+    });
+
+    if (error) {
+      console.error('get_memory_care_facilities_by_state error:', error);
+      return empty;
+    }
+
+    const rows = (data ?? []) as FacilityListItem[];
+    const total = rows.length > 0 ? Number(rows[0].total_count) : 0;
+
+    return {
+      facilities: rows,
+      total,
+      page,
+      pageSize,
+      pages: Math.ceil(total / pageSize),
+    };
+  } catch (err) {
+    console.error('fetchMemoryCareFacilities error:', err);
+    return empty;
+  }
 }
 
 export function assessmentToFacilityType(recommendation: string): string | null {

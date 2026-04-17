@@ -1,5 +1,6 @@
 "use client";
 
+import ProgressBar from "./ProgressBar";
 
 interface TransitionScreenProps {
   // The main message — supports the same {person}, {pronoun}, {possessive} placeholders
@@ -11,6 +12,8 @@ interface TransitionScreenProps {
   personPossessive: string;
   onContinue: () => void;
   onBack: () => void;
+  progress?: number;
+  progressLabel?: string;
 }
 
 export default function TransitionScreen({
@@ -22,6 +25,8 @@ export default function TransitionScreen({
   personPossessive,
   onContinue,
   onBack,
+  progress,
+  progressLabel,
 }: TransitionScreenProps) {
   const sub = (text: string) =>
     text
@@ -31,9 +36,16 @@ export default function TransitionScreen({
       .replace(/\{possessive\}/g, possessive);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white px-5 pb-12">
-      {/* Centered content — takes up the full vertical space */}
-      <div className="flex-1 flex flex-col items-center justify-center max-w-lg mx-auto w-full text-center">
+    <div className="bg-white px-5 py-8 max-w-lg mx-auto w-full">
+      {/* Progress bar */}
+      {progress !== undefined && (
+        <div className="mb-10">
+          <ProgressBar progress={progress} label={progressLabel} />
+        </div>
+      )}
+
+      {/* Centered content */}
+      <div className="flex flex-col items-center text-center mb-12">
         {/* Section badge */}
         <div className="mb-6">
           <span className="inline-block bg-amber-50 text-amber-700 text-sm font-medium px-3 py-1.5 rounded-full border border-amber-100">
@@ -50,8 +62,8 @@ export default function TransitionScreen({
         </p>
       </div>
 
-      {/* Navigation pinned to the bottom */}
-      <div className="max-w-lg mx-auto w-full flex flex-col gap-3">
+      {/* Navigation */}
+      <div className="flex flex-col gap-3">
         <button
           onClick={onContinue}
           className="w-full bg-teal-600 text-white py-4 rounded-xl text-base font-semibold
@@ -63,7 +75,7 @@ export default function TransitionScreen({
         <div className="flex items-center">
           <button
             onClick={onBack}
-            className="text-slate-500 text-sm font-medium py-3 px-1 hover:text-slate-700 transition-colors"
+            className="text-gray-600 text-base font-medium py-3 px-3 min-h-[44px] hover:text-slate-800 transition-colors"
           >
             ← Back
           </button>
