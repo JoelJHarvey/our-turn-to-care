@@ -82,19 +82,39 @@ const TYPE_CONFIG: Record<string, {
     contentHubSlug: 'nursing-homes',
     faqs: [
       {
-        question: 'What is the CMS Five-Star rating system for nursing homes?',
-        answer:
-          'The CMS Five-Star Quality Rating System rates nursing homes on a scale of 1–5 stars across three domains: health inspections, staffing levels, and quality measures. Five-star facilities perform above average in all three areas. You can view each sub-rating separately on our facility pages to understand exactly where a facility excels or falls short.',
-      },
-      {
-        question: "What's the difference between skilled nursing and custodial care?",
-        answer:
-          'Skilled nursing care involves medically necessary services provided by licensed professionals — such as wound care, IV therapy, or physical therapy after a hospitalization. Medicare covers up to 100 days of skilled nursing care following a qualifying hospital stay. Custodial care refers to help with daily activities like bathing, dressing, and eating. Medicare does NOT cover custodial care; it must be paid for privately or through Medicaid.',
-      },
-      {
         question: 'How much do nursing homes cost in Texas?',
         answer:
-          'According to 2025 CareScout data, the median monthly cost for a semi-private room in a Texas nursing home is approximately $6,600–$7,700. A private room typically costs $500–$1,000 more per month. Costs vary significantly by city — major metros like Houston, Dallas, and Austin generally run higher than smaller communities. Use our Cost Calculator for estimates specific to your zip code.',
+          'The statewide median cost of a semi-private room in a Texas nursing home is about $5,627 per month (roughly $67,524 per year), according to the 2025 CareScout Cost of Care Survey. A private room typically adds $500–$1,200 per month on top of that. Texas is notably cheaper than the national average of about $7,900/month for a semi-private room, but costs vary significantly within the state — nursing homes in Houston, Dallas, Austin, and San Antonio generally run 15–30% above the rural Texas median, while small towns and the Rio Grande Valley can come in below it. A specific facility\'s price also depends on staffing levels, private-vs-shared room, and extra services like memory care or ventilator support. Use our Cost Calculator for an estimate tied to your zip code.',
+      },
+      {
+        question: 'How do I read the CMS Five-Star rating, and how much should I trust it?',
+        answer:
+          'Every Medicare- or Medicaid-certified nursing home gets an overall star rating from 1 to 5 based on three components: health inspections (how the facility performed during unannounced state surveys), staffing (RN and total nurse-aide hours per resident per day), and quality measures (15 clinical outcomes like pressure ulcers, antipsychotic use, and falls with injury). The overall rating is heaviest on inspections, so a facility with great staffing but a serious recent citation can still score low. Treat the star rating as a screening tool, not a verdict — a 4- or 5-star home is a reasonable starting point, but you should always read the actual inspection report (available on Medicare.gov and linked from each of our facility pages) and visit in person before deciding. Pay particular attention to staffing turnover, RN hours on nights and weekends, and any citations related to abuse, neglect, or medication errors.',
+      },
+      {
+        question: 'Does Medicare pay for nursing home care in Texas?',
+        answer:
+          'Medicare covers short-term skilled nursing care, not long-term custodial care. If you have a qualifying 3-day inpatient hospital stay and need daily skilled nursing or therapy, Medicare Part A covers up to 100 days in a Medicare-certified skilled nursing facility: the first 20 days at no cost to you, and days 21–100 with a daily coinsurance of about $204 (2025 rate). After day 100, you\'re responsible for the full cost. Medicare does not pay for help with everyday tasks like bathing, dressing, or supervision if that\'s the only care you need — that\'s custodial care, and roughly two-thirds of long-stay nursing home residents end up relying on Medicaid, private long-term care insurance, or personal savings to cover it.',
+      },
+      {
+        question: 'How does Texas Medicaid help pay for a nursing home?',
+        answer:
+          'Texas Medicaid, administered by the Health and Human Services Commission (HHSC), pays for long-term nursing home care for residents who meet medical, income, and asset criteria. In 2025, the general income limit for long-term care Medicaid is about $2,829 per month for an individual, and countable assets must typically be under $2,000. Your home is usually exempt while you or a spouse live in it, and the Community Spouse Resource Allowance protects a portion of combined assets for a spouse who still lives at home. Texas enforces a 5-year look-back on asset transfers, and the state may pursue estate recovery against the home after the resident\'s death. Most Texas nursing homes accept Medicaid, but not every bed is Medicaid-certified — always confirm before admission. To start an application, call HHSC at 2-1-1 or 1-800-252-9240, or apply at YourTexasBenefits.com.',
+      },
+      {
+        question: 'What\'s the difference between a nursing home and assisted living?',
+        answer:
+          'Nursing homes provide 24/7 skilled nursing care and are staffed for residents with significant medical needs — think IV antibiotics, ventilator support, complex wound care, or late-stage dementia with behavioral issues. They\'re heavily regulated by both Texas HHSC and the federal CMS. Assisted living communities provide personal care (help with bathing, dressing, medications, meals) and light health oversight in a more apartment-like setting, but they do not provide around-the-clock skilled nursing. In Texas, the median assisted living cost runs about $4,500–$5,200 per month versus roughly $5,627 for a nursing home semi-private room, and assisted living residents generally have more privacy and independence. The right choice depends on medical complexity — if your loved one needs frequent professional nursing attention or can\'t safely manage mobility and meds, a nursing home is usually the right level of care.',
+      },
+      {
+        question: 'What should I look for when I tour a Texas nursing home?',
+        answer:
+          'Tour at least two different times of day — ideally one visit during a weekday meal and another on a weekend evening, when staffing is typically leanest. Observe whether residents are engaged (conversing, participating in activities) or left in front of a TV in hallways. Ask specifically: what is the RN-to-resident ratio on nights and weekends, what is staff turnover over the past year, how many residents are on antipsychotic medications, and when was the last state inspection. Walk through the halls unaccompanied if allowed — do common areas smell clean, are call lights answered promptly, are residents dressed and groomed? Ask to see the most recent inspection report (every Texas nursing home must make it available), check the facility\'s star rating and deficiency history on Medicare.gov, and talk to any family members of residents you run into. If an administrator is reluctant to answer direct questions or rushes you through the tour, that\'s meaningful information.',
+      },
+      {
+        question: 'What are warning signs of a poor-quality nursing home?',
+        answer:
+          'Red flags fall into three buckets. Regulatory: a 1- or 2-star CMS rating, repeated serious deficiencies (especially citations involving abuse, neglect, or medication errors), recent fines, or a change of ownership to a chain known for cost-cutting. Operational: high nursing staff turnover (above about 50% annually), consistently low RN coverage on nights and weekends, heavy use of antipsychotic medications on long-stay residents, and frequent use of temporary agency staff instead of regular employees. Experiential: strong urine odor in common areas, unanswered call lights, residents left unattended in wheelchairs, visible bruises or pressure sores, families who quietly tell you they\'re looking to move their loved one out, or staff who seem rushed and unable to make eye contact. Any one of these by itself isn\'t disqualifying, but a pattern is a reliable signal to keep looking.',
       },
     ],
   },
