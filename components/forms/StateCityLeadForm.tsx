@@ -108,9 +108,9 @@ export function StateCityLeadForm({
           {heading || defaultHeading}
         </h2>
         <p className="text-slate-600 text-sm max-w-lg mx-auto">
-          Navigating senior care options can be overwhelming. Tell us a little about
-          your situation and we&apos;ll help you find the right facilities, understand
-          costs, and explore financial assistance options.
+          Senior care options can be overwhelming to work through. Tell us a little
+          about your situation and we&apos;ll help you find the right facilities,
+          understand costs, and explore financial assistance options.
         </p>
       </div>
 

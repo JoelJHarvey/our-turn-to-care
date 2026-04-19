@@ -73,7 +73,7 @@ const TEXAS_FAQS: FaqItem[] = [
   {
     question: 'How much does senior care cost in Texas?',
     answer:
-      'Senior care costs in Texas vary widely by type. According to 2025 CareScout data, the median cost of a semi-private room in a Texas nursing home is approximately $6,600–$7,700 per month. Assisted living averages around $4,500–$5,500 per month, while home health aide services average $27 per hour. Adult day care is the most affordable option at roughly $78 per day. Costs can vary significantly by city — care in Houston or Dallas tends to be higher than in smaller communities. Use our Cost Calculator for estimates specific to your area.',
+      'Senior care costs in Texas vary widely by type. According to 2025 CareScout data, the median cost of a semi-private room in a Texas nursing home is approximately $6,600–$7,700 per month. Assisted living averages around $4,500–$5,500 per month, while home health aide services average $27 per hour. Adult day care is the most affordable option at roughly $78 per day. Big cities like Houston and Dallas typically cost more than smaller Texas communities. Use our Cost Calculator for estimates specific to your area.',
   },
   {
     question: 'Does Texas Medicaid cover assisted living?',
@@ -93,7 +93,7 @@ const TEXAS_FAQS: FaqItem[] = [
   {
     question: 'Does Medicare pay for long-term care in Texas?',
     answer:
-      'Medicare has very limited coverage for long-term care. It covers up to 100 days of skilled nursing facility care following a qualifying 3-day hospital stay — with full coverage for days 1–20 and a daily copay for days 21–100. Medicare does NOT cover custodial care (help with daily activities like bathing and dressing), which is what most people need in assisted living or nursing homes long-term. Medicare does cover home health services when you need skilled nursing or therapy and are homebound. For true long-term care, most Texans rely on Medicaid, long-term care insurance, or private pay.',
+      'Medicare has very limited coverage for long-term care. It covers up to 100 days of skilled nursing facility care following a qualifying 3-day hospital stay. Days 1–20 are covered in full, and days 21–100 require a daily copay. Medicare does NOT cover custodial care (help with daily activities like bathing and dressing), which is what most people need in assisted living or nursing homes long-term. Medicare does cover home health services when you need skilled nursing or therapy and are homebound. For true long-term care, most Texans rely on Medicaid, long-term care insurance, or private pay.',
   },
   {
     question: 'How do I qualify for Medicaid nursing home coverage in Texas?',
@@ -118,7 +118,7 @@ const TEXAS_FAQS: FaqItem[] = [
   {
     question: 'How long is the Medicaid waiver waitlist in Texas?',
     answer:
-      'Texas Medicaid waivers for community-based services, including the STAR+PLUS Home and Community-Based Services (HCBS) waiver, often have significant waitlists. Wait times vary by region and can range from several months to several years. To get on the interest list, contact the HHSC Interest List Management unit or your managed care organization if you\'re already enrolled in STAR+PLUS. Nursing home Medicaid does not have a waitlist — if you meet the financial and medical criteria, coverage can begin immediately.',
+      'Texas Medicaid waivers for community-based services, including the STAR+PLUS Home and Community-Based Services (HCBS) waiver, often have significant waitlists. Wait times vary by region and can range from several months to several years. To get on the interest list, contact the HHSC Interest List Management unit or your managed care organization if you\'re already enrolled in STAR+PLUS. Nursing home Medicaid is different. If you meet the financial and medical criteria, coverage can begin immediately with no waitlist.',
   },
   {
     question: 'What rights do nursing home residents have in Texas?',
@@ -314,8 +314,8 @@ export default async function TexasPage() {
             Search the Largest Database of Texas Senior Care Facilities
           </h2>
           <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mt-3">
-            Find the right care for yourself or a loved one — powered by CMS ratings, state
-            licensing data, and verified cost information.
+            Find the right care for yourself or a loved one. Every listing includes
+            CMS ratings, state licensing data, and verified cost info.
           </p>
 
           {/* Tier 2 — Hero stat */}
@@ -577,9 +577,9 @@ export default async function TexasPage() {
                 {formatNumber(stats.hospice)} providers in Texas
               </p>
               <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                Hospice provides compassionate, comfort-focused care for people with
-                terminal illnesses. The focus is on quality of life, pain management, and
-                emotional support for both patients and families.
+                Hospice provides comfort-focused care for people with terminal
+                illnesses. The focus is on quality of life, pain management, and
+                emotional support for patients and families.
               </p>
               <Link
                 href="/texas/hospice"
@@ -713,8 +713,8 @@ export default async function TexasPage() {
             Texas Senior Care Resources
           </h2>
           <p className="text-slate-500 mb-8 text-sm">
-            Official agencies, advocacy organizations, and tools to help you navigate
-            senior care in Texas.
+            Official agencies, advocacy organizations, and tools to help you make
+            sense of senior care in Texas.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -855,7 +855,7 @@ export default async function TexasPage() {
                   {
                     label: 'Aging & Disability Resource Center',
                     href: 'tel:+18559372372',
-                    note: 'Navigate long-term care options: 855-937-2372',
+                    note: 'Long-term care help: 855-937-2372',
                     external: false,
                   },
                   {
