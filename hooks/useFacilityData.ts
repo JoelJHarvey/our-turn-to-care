@@ -30,8 +30,8 @@ export function useFacilityData(options: UseFacilityDataOptions = {}): UseFacili
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 20, pages: 0 });
 
-  const debounceTimeoutRef = useRef<NodeJS.Timeout>();
-  const abortControllerRef = useRef<AbortController>();
+  const debounceTimeoutRef = useRef<NodeJS.Timeout>(undefined);
+  const abortControllerRef = useRef<AbortController>(undefined);
 
   const fetchFacilities = useCallback(async () => {
     if (!zip && !(state && city)) {
