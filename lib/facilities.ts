@@ -360,16 +360,10 @@ export async function fetchFacilitiesByStateAndType(
     page = 1,
     pageSize = 20,
     sortBy = 'city',
-    lat,
-    lon,
-    radiusMeters,
   }: {
     page?: number;
     pageSize?: number;
-    sortBy?: 'city' | 'rating' | 'distance';
-    lat?: number;
-    lon?: number;
-    radiusMeters?: number;
+    sortBy?: 'city' | 'rating';
   } = {}
 ): Promise<FacilityListResult> {
   const empty: FacilityListResult = { facilities: [], total: 0, page, pageSize, pages: 0 };
@@ -381,9 +375,6 @@ export async function fetchFacilitiesByStateAndType(
       page_num: page,
       page_size: pageSize,
       sort_by: sortBy,
-      lat: lat ?? null,
-      lon: lon ?? null,
-      radius_meters: radiusMeters ?? null,
     });
 
     if (error) {

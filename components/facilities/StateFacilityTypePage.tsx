@@ -17,7 +17,6 @@ import { supabase } from '@/lib/supabase';
 import {
   fetchFacilitiesByStateAndType,
   fetchMemoryCareFacilities,
-  getLatLonForZip,
   FacilityListItem,
 } from '@/lib/facilities';
 import { formatPhoneNumber, renderStarRating } from '@/lib/facilityHelpers';
@@ -307,14 +306,10 @@ export async function StateFacilityTypePage({
   const config = TYPE_CONFIG[isMemoryCare ? 'memory_care' : facilityType];
   const pageUrl = `/${stateSlug}/${facilityTypeSlug}`;
 
-  // ── Geocode zip if provided ──
-  let geoCoords: { lat: number; lon: number } | null = null;
-  if (zip && zip.length === 5 && !isMemoryCare) {
-    geoCoords = await getLatLonForZip(zip);
-  }
-  const radiusMeters = radius * 1609.34;
-  const effectiveSortBy: 'city' | 'rating' | 'distance' =
-    geoCoords ? 'distance' : sortBy;
+  // NOTE: Zip proximity filtering on state-level list pages is not yet supported
+  // by the get_facilities_by_state_and_type RPC. If a zip is provided, we still
+  // show the full state-wide list. Future enhancement: redirect to /texas/search
+  // when a zip is entered so the user gets a real proximity-filtered view.
 
   // ── Fetch facilities ──
   let facilities: FacilityListItem[] = [];
@@ -330,10 +325,7 @@ export async function StateFacilityTypePage({
     const result = await fetchFacilitiesByStateAndType(state, facilityType, {
       page,
       pageSize: PAGE_SIZE,
-      sortBy: effectiveSortBy,
-      lat: geoCoords?.lat,
-      lon: geoCoords?.lon,
-      radiusMeters: geoCoords ? radiusMeters : undefined,
+      sortBy,
     });
     facilities = result.facilities;
     total = result.total;
@@ -361,7 +353,6 @@ export async function StateFacilityTypePage({
 
   const startIdx = total > 0 ? (page - 1) * PAGE_SIZE + 1 : 0;
   const endIdx = Math.min(page * PAGE_SIZE, total);
-  const isFiltered = Boolean(geoCoords && zip);
 
   // ── JSON-LD schemas ──
   const breadcrumbSchema = {
@@ -476,57 +467,37 @@ export async function StateFacilityTypePage({
 
         {/* ── Results bar + facility list ── */}
         <div>
-          {/* Proximity filter banner */}
-          {isFiltered && (
-            <div className="mb-4 flex items-center gap-3 px-4 py-3 bg-teal-50 border border-teal-200 rounded-xl text-sm">
-              <span className="text-teal-700 font-medium">
-                📍 Showing facilities within {radius} miles of zip {zip}
-              </span>
-              <Link
-                href={`${pageUrl}?sort=${sortBy}`}
-                className="ml-auto text-slate-500 hover:text-slate-700 text-xs underline whitespace-nowrap"
-              >
-                Show all {stateName} →
-              </Link>
-            </div>
-          )}
-
           {/* Results count + sort */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
             <p className="text-sm text-slate-600">
               {total > 0
                 ? `Showing ${formatNumber(startIdx)}–${formatNumber(endIdx)} of ${formatNumber(total)} ${facilityTypeLabel.toLowerCase()} in ${stateName}`
-                : `No ${facilityTypeLabel.toLowerCase()} found — the database RPC may need to be run.`}
+                : `No ${facilityTypeLabel.toLowerCase()} found.`}
             </p>
 
-            {!geoCoords && (
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-slate-500">Sort:</span>
-                <Link
-                  href={`${pageUrl}?sort=city${zip ? `&zip=${zip}&radius=${radius}` : ''}`}
-                  className={`px-3 py-1 rounded-full border text-xs font-medium transition-colors ${
-                    sortBy === 'city'
-                      ? 'bg-teal-600 text-white border-teal-600'
-                      : 'bg-white text-slate-600 border-slate-300 hover:border-teal-400'
-                  }`}
-                >
-                  City A–Z
-                </Link>
-                <Link
-                  href={`${pageUrl}?sort=rating${zip ? `&zip=${zip}&radius=${radius}` : ''}`}
-                  className={`px-3 py-1 rounded-full border text-xs font-medium transition-colors ${
-                    sortBy === 'rating'
-                      ? 'bg-teal-600 text-white border-teal-600'
-                      : 'bg-white text-slate-600 border-slate-300 hover:border-teal-400'
-                  }`}
-                >
-                  Rating
-                </Link>
-              </div>
-            )}
-            {geoCoords && (
-              <span className="text-xs text-slate-400 italic">Sorted by distance</span>
-            )}
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-slate-500">Sort:</span>
+              <Link
+                href={`${pageUrl}?sort=city`}
+                className={`px-3 py-1 rounded-full border text-xs font-medium transition-colors ${
+                  sortBy === 'city'
+                    ? 'bg-teal-600 text-white border-teal-600'
+                    : 'bg-white text-slate-600 border-slate-300 hover:border-teal-400'
+                }`}
+              >
+                City A–Z
+              </Link>
+              <Link
+                href={`${pageUrl}?sort=rating`}
+                className={`px-3 py-1 rounded-full border text-xs font-medium transition-colors ${
+                  sortBy === 'rating'
+                    ? 'bg-teal-600 text-white border-teal-600'
+                    : 'bg-white text-slate-600 border-slate-300 hover:border-teal-400'
+                }`}
+              >
+                Rating
+              </Link>
+            </div>
           </div>
 
           {/* Facility list */}
@@ -539,23 +510,8 @@ export async function StateFacilityTypePage({
           ) : (
             <div className="text-center py-16 bg-slate-50 rounded-xl border border-slate-200">
               <p className="text-slate-500 mb-2">
-                {isFiltered
-                  ? `No facilities found within ${radius} miles of zip ${zip}.`
-                  : 'No facilities found.'}
+                No facilities found.
               </p>
-              {isFiltered && (
-                <Link
-                  href={`${pageUrl}?sort=${sortBy}`}
-                  className="text-sm text-teal-600 hover:underline"
-                >
-                  Show all {stateName} facilities →
-                </Link>
-              )}
-              {!isFiltered && (
-                <p className="text-xs text-slate-400 mt-1">
-                  Run the SQL RPC in Supabase to enable this page.
-                </p>
-              )}
             </div>
           )}
 
@@ -566,7 +522,7 @@ export async function StateFacilityTypePage({
               <div className="flex gap-2">
                 {page > 1 && (
                   <Link
-                    href={`${pageUrl}?page=${page - 1}&sort=${sortBy}${zip ? `&zip=${zip}&radius=${radius}` : ''}`}
+                    href={`${pageUrl}?page=${page - 1}&sort=${sortBy}`}
                     className="px-4 py-2 border border-slate-300 rounded-lg text-sm text-slate-700 hover:border-teal-400 hover:text-teal-700 transition-colors"
                   >
                     ← Previous
@@ -574,7 +530,7 @@ export async function StateFacilityTypePage({
                 )}
                 {page < pages && (
                   <Link
-                    href={`${pageUrl}?page=${page + 1}&sort=${sortBy}${zip ? `&zip=${zip}&radius=${radius}` : ''}`}
+                    href={`${pageUrl}?page=${page + 1}&sort=${sortBy}`}
                     className="px-4 py-2 border border-slate-300 rounded-lg text-sm text-slate-700 hover:border-teal-400 hover:text-teal-700 transition-colors"
                   >
                     Next →
