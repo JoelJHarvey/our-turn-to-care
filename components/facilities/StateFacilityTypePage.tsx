@@ -84,37 +84,37 @@ const TYPE_CONFIG: Record<string, {
       {
         question: 'How much do nursing homes cost in Texas?',
         answer:
-          'The statewide median cost of a semi-private room in a Texas nursing home is about $5,627 per month (roughly $67,524 per year), according to the 2025 CareScout Cost of Care Survey. A private room typically adds $500–$1,200 per month on top of that. Texas is notably cheaper than the national average of about $7,900/month for a semi-private room, but costs vary significantly within the state — nursing homes in Houston, Dallas, Austin, and San Antonio generally run 15–30% above the rural Texas median, while small towns and the Rio Grande Valley can come in below it. A specific facility\'s price also depends on staffing levels, private-vs-shared room, and extra services like memory care or ventilator support. Use our Cost Calculator for an estimate tied to your zip code.',
+          'A semi-private room in a Texas nursing home runs about $5,627 a month at the statewide median, or roughly $67,524 a year, according to the 2025 CareScout Cost of Care Survey. A private room usually adds $500 to $1,200 on top of that. Texas is a good bit cheaper than the national average of about $7,900 a month for a semi-private room. Prices still swing quite a bit inside the state. Facilities in Houston, Dallas, Austin, and San Antonio tend to run 15 to 30 percent above the rural Texas median. Small towns and much of the Rio Grande Valley come in below it. The final price for a specific facility also depends on staffing levels, the room type, and extras like ventilator care or a locked memory-care unit. For an estimate tied to your zip code, use our Cost Calculator.',
       },
       {
-        question: 'How do I read the CMS Five-Star rating, and how much should I trust it?',
+        question: 'How do I read the CMS Five-Star rating?',
         answer:
-          'Every Medicare- or Medicaid-certified nursing home gets an overall star rating from 1 to 5 based on three components: health inspections (how the facility performed during unannounced state surveys), staffing (RN and total nurse-aide hours per resident per day), and quality measures (15 clinical outcomes like pressure ulcers, antipsychotic use, and falls with injury). The overall rating is heaviest on inspections, so a facility with great staffing but a serious recent citation can still score low. Treat the star rating as a screening tool, not a verdict — a 4- or 5-star home is a reasonable starting point, but you should always read the actual inspection report (available on Medicare.gov and linked from each of our facility pages) and visit in person before deciding. Pay particular attention to staffing turnover, RN hours on nights and weekends, and any citations related to abuse, neglect, or medication errors.',
+          'Every Medicare- or Medicaid-certified nursing home carries an overall star rating from 1 to 5. CMS builds that rating from three pieces: health inspection results from unannounced state surveys, staffing (RN and total nurse-aide hours per resident per day), and 15 clinical quality measures like pressure ulcers, antipsychotic use, and falls with injury. Inspection results carry the most weight, which is why a facility with strong staffing can still land at 2 stars after a serious citation. The rating is a useful first pass on a long list. It narrows the field, but it does not pick the facility for you. A 4 or 5 star home is a reasonable place to start. Before you sign anything, pull the actual inspection report (it lives on Medicare.gov and is linked from each of our facility pages) and walk through the building. Look closely at staff turnover, RN coverage on nights and weekends, and any citations involving abuse, neglect, or medication errors.',
       },
       {
         question: 'Does Medicare pay for nursing home care in Texas?',
         answer:
-          'Medicare covers short-term skilled nursing care, not long-term custodial care. If you have a qualifying 3-day inpatient hospital stay and need daily skilled nursing or therapy, Medicare Part A covers up to 100 days in a Medicare-certified skilled nursing facility: the first 20 days at no cost to you, and days 21–100 with a daily coinsurance of about $204 (2025 rate). After day 100, you\'re responsible for the full cost. Medicare does not pay for help with everyday tasks like bathing, dressing, or supervision if that\'s the only care you need — that\'s custodial care, and roughly two-thirds of long-stay nursing home residents end up relying on Medicaid, private long-term care insurance, or personal savings to cover it.',
+          'Medicare pays for short-term skilled nursing, but does not cover long-term custodial care. If you spend at least three days as an inpatient in a hospital and then need daily skilled nursing or therapy, Part A will pick up the bill in a Medicare-certified skilled nursing facility for up to 100 days. The first 20 days cost you nothing. Days 21 through 100 carry a daily coinsurance of about $204 in 2025. After day 100 you pay the full cost. Everyday help with things like bathing, dressing, or supervision does not qualify on its own. That kind of help is custodial care, and about two-thirds of long-stay nursing home residents end up paying for it through Medicaid, long-term care insurance, or personal savings.',
       },
       {
         question: 'How does Texas Medicaid help pay for a nursing home?',
         answer:
-          'Texas Medicaid, administered by the Health and Human Services Commission (HHSC), pays for long-term nursing home care for residents who meet medical, income, and asset criteria. In 2025, the general income limit for long-term care Medicaid is about $2,829 per month for an individual, and countable assets must typically be under $2,000. Your home is usually exempt while you or a spouse live in it, and the Community Spouse Resource Allowance protects a portion of combined assets for a spouse who still lives at home. Texas enforces a 5-year look-back on asset transfers, and the state may pursue estate recovery against the home after the resident\'s death. Most Texas nursing homes accept Medicaid, but not every bed is Medicaid-certified — always confirm before admission. To start an application, call HHSC at 2-1-1 or 1-800-252-9240, or apply at YourTexasBenefits.com.',
+          'Texas Medicaid is administered by the Health and Human Services Commission (HHSC), and it will pay for long-term nursing home care if you meet the medical, income, and asset criteria. For 2025, the general income limit for long-term care Medicaid is about $2,829 a month for an individual, and countable assets must usually stay under $2,000. Your home is typically exempt while you or a spouse are still living in it, and the Community Spouse Resource Allowance protects a portion of combined assets for a spouse who stays at home. Texas enforces a five-year look-back on asset transfers, and the state can pursue estate recovery against the home after the resident passes away. Most Texas nursing homes accept Medicaid, but not every bed in every facility is Medicaid-certified, so confirm before admission. To start an application, call HHSC at 2-1-1 or 1-800-252-9240, or apply online at YourTexasBenefits.com.',
       },
       {
         question: 'What\'s the difference between a nursing home and assisted living?',
         answer:
-          'Nursing homes provide 24/7 skilled nursing care and are staffed for residents with significant medical needs — think IV antibiotics, ventilator support, complex wound care, or late-stage dementia with behavioral issues. They\'re heavily regulated by both Texas HHSC and the federal CMS. Assisted living communities provide personal care (help with bathing, dressing, medications, meals) and light health oversight in a more apartment-like setting, but they do not provide around-the-clock skilled nursing. In Texas, the median assisted living cost runs about $4,500–$5,200 per month versus roughly $5,627 for a nursing home semi-private room, and assisted living residents generally have more privacy and independence. The right choice depends on medical complexity — if your loved one needs frequent professional nursing attention or can\'t safely manage mobility and meds, a nursing home is usually the right level of care.',
+          'Nursing homes provide 24/7 skilled nursing and are staffed for residents with serious medical needs: IV antibiotics, ventilator support, complex wound care, or late-stage dementia with behavioral issues. They answer to both Texas HHSC and federal CMS regulators. Assisted living communities provide personal care (help with bathing, dressing, medications, meals) and light health oversight in a more apartment-style setting, but they are not staffed or licensed for around-the-clock skilled nursing. In Texas, the assisted living median runs about $4,500 to $5,200 a month compared with roughly $5,627 for a nursing home semi-private room, and assisted living residents typically have more privacy and more independence. If your loved one needs frequent professional nursing attention, or cannot safely manage mobility and medications, a nursing home is usually the right level of care.',
       },
       {
         question: 'What should I look for when I tour a Texas nursing home?',
         answer:
-          'Tour at least two different times of day — ideally one visit during a weekday meal and another on a weekend evening, when staffing is typically leanest. Observe whether residents are engaged (conversing, participating in activities) or left in front of a TV in hallways. Ask specifically: what is the RN-to-resident ratio on nights and weekends, what is staff turnover over the past year, how many residents are on antipsychotic medications, and when was the last state inspection. Walk through the halls unaccompanied if allowed — do common areas smell clean, are call lights answered promptly, are residents dressed and groomed? Ask to see the most recent inspection report (every Texas nursing home must make it available), check the facility\'s star rating and deficiency history on Medicare.gov, and talk to any family members of residents you run into. If an administrator is reluctant to answer direct questions or rushes you through the tour, that\'s meaningful information.',
+          'Tour at least twice, at different times of day. A weekday meal and a weekend evening are the two most useful windows, because weekend evenings are when staffing is thinnest. Watch whether residents are engaged (talking, taking part in activities) or sitting in hallways in front of a TV. Ask specific questions. What is the RN-to-resident ratio on nights and weekends? What was nursing staff turnover over the past year? How many residents are on antipsychotic medications? When was the last state inspection? If the facility lets you, walk the halls without an escort. Do common areas smell clean? Are call lights answered quickly? Are residents dressed and groomed? Ask to see the most recent inspection report (every Texas nursing home must make it available), pull the star rating and deficiency history on Medicare.gov, and chat with any family members of current residents you bump into. An administrator who dodges direct questions or tries to rush you through the tour is telling you something.',
       },
       {
         question: 'What are warning signs of a poor-quality nursing home?',
         answer:
-          'Red flags fall into three buckets. Regulatory: a 1- or 2-star CMS rating, repeated serious deficiencies (especially citations involving abuse, neglect, or medication errors), recent fines, or a change of ownership to a chain known for cost-cutting. Operational: high nursing staff turnover (above about 50% annually), consistently low RN coverage on nights and weekends, heavy use of antipsychotic medications on long-stay residents, and frequent use of temporary agency staff instead of regular employees. Experiential: strong urine odor in common areas, unanswered call lights, residents left unattended in wheelchairs, visible bruises or pressure sores, families who quietly tell you they\'re looking to move their loved one out, or staff who seem rushed and unable to make eye contact. Any one of these by itself isn\'t disqualifying, but a pattern is a reliable signal to keep looking.',
+          'Some warning signs show up in the public records. A 1- or 2-star CMS rating, repeated serious deficiencies (especially around abuse, neglect, or medication errors), recent fines, or a change of ownership to a chain with a cost-cutting reputation all fall in that category. Others take more digging. High nursing staff turnover (above roughly 50 percent a year), thin RN coverage on nights and weekends, heavy antipsychotic use among long-stay residents, and constant reliance on temporary agency staff instead of regular employees are all worth asking about directly. Then there are the things you can see and smell on a walk-through: urine odor in common areas, call lights that go unanswered, residents left unattended in wheelchairs, visible bruises or pressure sores, staff who seem rushed and cannot make eye contact, and family members who quietly mention they are looking to move their loved one somewhere else. One of these on its own does not settle the question. A cluster of them does.',
       },
     ],
   },
@@ -125,19 +125,34 @@ const TYPE_CONFIG: Record<string, {
     contentHubSlug: 'assisted-living',
     faqs: [
       {
-        question: 'What services do assisted living facilities provide?',
+        question: 'How much does assisted living cost in Texas?',
         answer:
-          'Assisted living communities typically provide assistance with activities of daily living (bathing, dressing, grooming, toileting), medication management, meals, housekeeping, laundry, transportation, and social activities. Most also provide 24-hour staff availability for emergencies. Texas law requires assisted living facilities to provide personal care services, but not skilled nursing care.',
+          'The statewide median for assisted living in Texas lands roughly between $4,500 and $5,200 a month in 2025, based on CareScout data. That is meaningfully cheaper than a nursing home semi-private room ($5,627 a month) and well below the national assisted living average. Price depends on apartment size (studio vs. one-bedroom), whether the unit is private or shared, and the level-of-care assessment. Most Texas communities charge a base rent plus tiered care fees that rise as needs grow. Austin and Dallas tend to price at the top of the range. Smaller cities and rural areas come in lower. Memory care wings usually add 20 to 30 percent on top of the base rate. Before you sign anything, get the full fee schedule in writing, including base rent, each care level, the community fee, and any second-occupant fee.',
       },
       {
-        question: 'Does Texas Medicaid cover assisted living?',
+        question: 'What services do Texas assisted living communities provide?',
         answer:
-          'Texas Medicaid does not directly cover room and board in assisted living facilities. However, the STAR+PLUS Home and Community-Based Services (HCBS) waiver can cover personal care, nursing services, and other supports within an assisted living setting for eligible individuals. There is often a waitlist for waiver services. Contact HHSC at 1-800-252-0154 to get on the interest list.',
+          'Assisted living covers help with activities of daily living, meaning bathing, dressing, grooming, toileting, and transferring. On top of that you get medication management, three meals a day, housekeeping, laundry, and scheduled transportation to medical appointments. Most Texas communities are staffed 24 hours a day for emergencies, but they are not staffed or licensed for continuous skilled nursing. If your loved one needs IV antibiotics, ventilator support, complex wound care, or extensive rehab, they need a nursing home. Communities typically run social programming throughout the week: group exercise, outings, religious services, arts, games. Many have on-site salons, fitness rooms, and secured outdoor spaces. Some offer memory care wings for residents with dementia.',
       },
       {
-        question: "What's the difference between assisted living and a nursing home?",
+        question: 'What\'s the difference between a Type A and Type B assisted living license in Texas?',
         answer:
-          'Assisted living communities are for seniors who need help with daily activities but not around-the-clock medical care. They emphasize independence and a home-like environment. Nursing homes provide 24/7 skilled nursing care for people with significant medical needs. Nursing homes are more regulated and typically cost more than assisted living. If someone\'s medical needs increase beyond what assisted living can accommodate, a transition to a nursing home may be needed.',
+          'Texas HHSC licenses assisted living communities as either Type A or Type B. A Type A facility can only accept residents who are physically and mentally capable of evacuating the building on their own in an emergency, and whose needs do not cross into skilled nursing. A Type B facility can accept residents who need help to evacuate and who may have more complex care needs, including dementia. Most Texas communities marketed as "assisted living" are Type B, but not all of them are, and a Type A facility may be required to discharge your loved one if their condition changes. Before you move anyone in, ask which license type the community holds and what their discharge criteria are.',
+      },
+      {
+        question: 'Does Texas Medicaid pay for assisted living?',
+        answer:
+          'Texas Medicaid does not pay for room and board in an assisted living community. The STAR+PLUS Home and Community-Based Services (HCBS) waiver can cover the services portion: personal care, nursing visits, medication management, and other supports for financially and medically eligible residents. Room and board still has to come out of Social Security, pension, private savings, or a family contribution. Waiver slots are limited, and there is typically a waitlist (HHSC calls it an "interest list") that can run years long in parts of Texas, so get on it as early as possible by calling HHSC at 2-1-1 or 1-800-252-9240. Not every assisted living community participates in the waiver. Ask directly whether a specific facility is a STAR+PLUS provider before assuming coverage.',
+      },
+      {
+        question: 'How do I tell if a Texas assisted living community is well-run?',
+        answer:
+          'HHSC inspection reports are public. Search the facility\'s name at hhs.texas.gov to pull up its recent survey history, any deficiencies, and the corrective actions taken. The paperwork is only half the picture. The other half is the visit. Tour at least twice, ideally once at mealtime and once on a weekend evening when staffing thins out. Watch whether residents are engaged or sitting in front of a TV, whether call lights get answered quickly, and whether staff know residents by name. Ask about caregiver turnover in the past year (anything above 60 percent is a yellow flag), overnight staffing ratios, how the level-of-care assessment gets done, and how discharge decisions are made. If you can, talk to a family member of a current resident. They will tell you things the marketing tour will not.',
+      },
+      {
+        question: 'When is it time to move from assisted living to a nursing home?',
+        answer:
+          'The move usually becomes necessary when care needs outgrow what the assisted living license allows. Common triggers include frequent falls that keep sending the resident back to the ER, new incontinence that the facility\'s staffing cannot manage, wandering or aggression that is not safe in an unsecured setting, complex medical needs like IV therapy or serious wound care, and rapid cognitive decline. Texas assisted living communities will generally give a 30-day notice if they can no longer meet a resident\'s needs. Sometimes the trigger is a hospitalization the resident cannot safely return home from. It pays to get ahead of this. Identify two or three nursing home options and get on their waitlists while your loved one is still stable, rather than trying to find a bed in a crisis.',
       },
     ],
   },
@@ -148,19 +163,34 @@ const TYPE_CONFIG: Record<string, {
     contentHubSlug: 'memory-care',
     faqs: [
       {
-        question: 'What is memory care and who needs it?',
+        question: 'What is memory care, and who needs it?',
         answer:
-          'Memory care is a specialized form of residential care designed for people with Alzheimer\'s disease, dementia, and other cognitive impairments. Unlike standard assisted living, memory care communities feature secured environments to prevent wandering, staff trained in dementia-specific care techniques, structured daily routines and therapeutic activities, and higher staff-to-resident ratios. Memory care is appropriate when someone can no longer safely live at home or in standard assisted living due to cognitive decline.',
+          'Memory care is long-term care built specifically for people with Alzheimer\'s, other dementias, or significant cognitive impairment. A few things set it apart from standard assisted living. Exits are secured, and the physical layout is designed to prevent wandering. Direct-care staff are trained in dementia-specific care techniques (curricula like Teepa Snow\'s Positive Approach or Validation Therapy are common). Staff-to-resident ratios are higher. Daily routines are organized around cognitive support through music, reminiscence, sensory activities, and consistent mealtimes. Memory care usually makes sense when someone can no longer live safely at home or in regular assisted living because of wandering, unsafe behaviors, aggression, or the loss of basic self-care skills.',
       },
       {
-        question: 'How do I know when a loved one needs memory care?',
+        question: 'How much does memory care cost in Texas?',
         answer:
-          'Signs that someone may need memory care include: frequent wandering or getting lost, inability to manage daily tasks safely (bathing, dressing, meals), aggressive behavior or extreme mood swings, inability to recognize family members, safety risks at home (leaving stove on, falling frequently), and significant caregiver burnout. A physician assessment and consultation with a geriatric care manager can help determine the right level of care.',
+          'Memory care in Texas typically runs 20 to 30 percent more than standard assisted living, which puts the statewide median somewhere in the $5,500 to $6,500 a month range. Higher-acuity or private-room options in Austin, Dallas, or Houston can cross $8,000 a month. Pricing usually bundles the memory care wing premium, a higher level-of-care fee reflecting dementia-specific staffing, and sometimes a one-time community fee at admission. Most memory care is paid for out of pocket. Texas Medicaid\'s STAR+PLUS waiver can sometimes cover the services portion in waiver-participating communities, but room and board remains private pay.',
       },
       {
-        question: 'What should I look for when choosing a memory care facility?',
+        question: 'How do I know when my loved one needs memory care?',
         answer:
-          'Key things to evaluate: the staff-to-resident ratio (especially overnight), whether staff are specifically trained in dementia care techniques (e.g., Validation Therapy, Teepa Snow\'s Positive Approach), the security features to prevent wandering, the activity programming (music therapy, reminiscence therapy, sensory activities), how the facility communicates with families, the physical layout (simple, low-stimulation environments reduce confusion), and the facility\'s policy on antipsychotic medications. Visit at different times of day before making a decision.',
+          'The most common triggers involve safety and behavior. Frequent wandering or getting lost in familiar places. Dangerous forgetfulness like leaving the stove on or missing medications. Aggression or severe anxiety a family cannot de-escalate at home. Sundowning that disrupts sleep for everyone in the house. Incontinence layered on top of cognitive decline. Failure to recognize close family members. Quieter signs matter too: weight loss, withdrawal, repeated falls, or a primary caregiver hitting burnout. A physician assessment (a geriatrician or neurologist is ideal) combined with a consultation with a geriatric care manager usually clarifies whether regular assisted living, memory care, or a nursing home is the right fit.',
+      },
+      {
+        question: 'What does the Texas Alzheimer\'s disclosure requirement tell me?',
+        answer:
+          'Any Texas facility that advertises memory care or Alzheimer\'s care is required by state law to hand over a written disclosure statement. It covers admission and discharge criteria, staff training, staffing ratios, security features, activity programming, the care-planning process, and medication policies. That disclosure is one of the most useful documents you can put in front of yourself when comparing two or three facilities side by side. Request it in writing, read it carefully, and take any mismatch between what the disclosure says and what you heard on the marketing tour as a serious warning. If a community cannot produce the disclosure when you ask for it, that is a problem on its own.',
+      },
+      {
+        question: 'What should I look for when choosing a Texas memory care facility?',
+        answer:
+          'The things that matter most are staff and physical environment, which can get overshadowed by amenities on a glossy tour. Ask about overnight staffing ratios specifically. Many facilities show well during the day and thin out dramatically at night. Confirm that direct-care staff receive dementia-specific training and ask what curriculum is used. Walk the halls. A well-run memory care environment feels calm, quiet, and low-stimulation, with simple wayfinding, outdoor access to secured courtyards, and activity stations instead of residents sitting in front of a TV. Ask about antipsychotic medication use. Lower rates generally suggest a care philosophy that leans on behavioral interventions rather than sedation. Visit during meals and during the late afternoon (the typical sundowning window) so you can see how staff handle the harder moments.',
+      },
+      {
+        question: 'Is memory care available in nursing homes, or only in assisted living?',
+        answer:
+          'Both. In Texas, roughly half of the 1,800-plus facilities that offer memory care are nursing homes with dedicated dementia units. The other half are assisted living communities with memory care wings. Which setting fits depends on medical complexity. Nursing-home memory care is usually the right call if your loved one has significant medical needs layered on top of dementia, such as a feeding tube, IV therapy, or late-stage immobility. Assisted living memory care is typically a better match for mobile residents whose issues are cognitive more than medical. Cost and Medicaid coverage differ too. Long-stay nursing home care is more commonly covered by Medicaid than assisted living memory care is.',
       },
     ],
   },
@@ -171,19 +201,34 @@ const TYPE_CONFIG: Record<string, {
     contentHubSlug: 'home-care',
     faqs: [
       {
-        question: "What's the difference between home health and home care?",
+        question: 'What\'s the difference between home health and home care?',
         answer:
-          'Home health refers to medically necessary services provided by licensed professionals (nurses, physical/occupational/speech therapists) in the home — typically ordered by a physician after a hospitalization or for a chronic condition. Home care (also called personal care or private duty care) refers to non-medical assistance with daily activities like bathing, cooking, and companionship. Medicare covers home health when you\'re homebound and need skilled care; it does NOT cover non-medical home care.',
+          'Home health refers to medical, skilled services delivered at home by licensed professionals: registered nurses, physical therapists, occupational therapists, speech therapists, and medical social workers. It is ordered by a physician, typically short-term (episodes run about 60 days), and covered by Medicare for those who qualify. Home care (also called non-medical home care, personal care, or private duty) is help with everyday activities like bathing, dressing, meal prep, light housekeeping, companionship, and transportation. The aides who provide home care do not need to be medically licensed, and Medicare does not pay for it. Many families end up needing both at different points: home health after a hospitalization, and ongoing home care to fill the longer-term gap.',
       },
       {
-        question: 'Does Medicare cover home health services in Texas?',
+        question: 'Does Medicare cover home health in Texas?',
         answer:
-          'Medicare covers home health when you meet all of these criteria: (1) you\'re homebound, meaning leaving home requires considerable effort; (2) you need skilled nursing care or physical/occupational/speech therapy; (3) the care is ordered by a physician; and (4) the agency is Medicare-certified. Coverage includes skilled nursing visits, therapy, home health aide visits, and medical social services. There is no copay for home health under Medicare Part A.',
+          'Yes, if you meet four criteria: you are homebound (meaning leaving home takes real effort), you need skilled nursing care or physical/occupational/speech therapy, the care is ordered by your physician, and the agency is Medicare-certified. When those conditions are met, Medicare Part A picks up 100 percent of the cost. That includes skilled nursing visits, therapies, home health aide visits while skilled care is active, medical social services, and medical equipment tied to the plan of care. There is no deductible and no copay on the home health visits themselves. Medicare does not cover 24-hour care, delivered meals, homemaker services on their own, or custodial care if that is all you need.',
       },
       {
-        question: 'How do I choose a home health agency?',
+        question: 'How much does home care (non-medical) cost in Texas?',
         answer:
-          'Look for Medicare-certified agencies, which are subject to federal quality standards. Check the CMS Home Health Compare tool for quality ratings. Ask about the agency\'s response time for urgent calls, staff continuity (seeing the same nurse/aide regularly), how they handle after-hours needs, and whether they accept your insurance. Request references from current or former patients. Confirm the agency is licensed with the Texas Health and Human Services Commission.',
+          'Private-pay home care aides in Texas typically run $25 to $30 an hour in 2025, per CareScout data. That works out to roughly $4,300 to $5,200 a month for a standard 40-hour-a-week schedule. Round-the-clock live-in or 24/7 coverage can exceed $15,000 a month. At that cost, residential options like assisted living or a nursing home are usually cheaper. Most families stretch dollars by combining part-time paid care with family caregiving. Long-term care insurance, VA Aid & Attendance (for qualifying veterans), and Texas Medicaid waivers like STAR+PLUS and CLASS can all help cover the bill for eligible seniors.',
+      },
+      {
+        question: 'How do I choose a good Texas home health agency?',
+        answer:
+          'Start with Medicare certification. Certified agencies meet federal quality standards and appear on Medicare.gov\'s Home Health Compare tool, which publishes star ratings and patient-experience survey data. Verify current licensure through the Texas Health and Human Services Commission. Then get specific with the agency. What is your response time for an urgent call at 2 a.m.? How often will the same nurse or aide come back, and how do you handle staff continuity? Do you staff weekends and holidays in-house, or hand off to an answering service? Are you in-network with my insurance, including any Medicare Advantage plan? Agencies worth hiring will answer those questions clearly, in writing. Vague or defensive answers are a reason to keep looking.',
+      },
+      {
+        question: 'What skilled services does Medicare home health include?',
+        answer:
+          'Skilled nursing visits handle wound care, IV therapy, medication teaching, diabetes management, and post-surgical monitoring. Physical therapy supports recovery after a stroke, fall, or orthopedic surgery. Occupational therapy helps people regain the skills they need for daily living. Speech-language therapy addresses post-stroke issues or swallowing problems. Home health aide visits cover bathing and personal care while skilled nursing or therapy is also in place. Medical social workers connect families with community resources. Episodes run 60 days and a physician can recertify them if you still meet the homebound and skilled-need criteria.',
+      },
+      {
+        question: 'How do Texas Medicaid waivers help pay for home care?',
+        answer:
+          'Texas runs several waiver programs that cover personal attendant care at home for qualifying seniors. STAR+PLUS HCBS is the most common and serves seniors and adults with disabilities who are enrolled in STAR+PLUS managed care. Community Based Alternatives covers certain medically fragile individuals. Community First Choice supports attendant services tied to activities of daily living. Between them, these programs can pay for personal care, homemaker services, respite, and some nursing visits, often enough to delay or prevent a nursing home placement. Eligibility is income- and asset-limited similar to nursing home Medicaid, and interest lists can be long in some regions. Apply early by calling HHSC at 2-1-1 or 1-800-252-9240.',
       },
     ],
   },
@@ -194,19 +239,34 @@ const TYPE_CONFIG: Record<string, {
     contentHubSlug: 'hospice',
     faqs: [
       {
-        question: 'When is it time to consider hospice care?',
+        question: 'When is it time to consider hospice?',
         answer:
-          'Hospice is appropriate when a person\'s illness is terminal, a physician certifies a life expectancy of 6 months or less if the illness follows its expected course, and the focus of care shifts from curative treatment to comfort. Many families wish they had chosen hospice sooner — studies show that hospice patients often live as long or longer than those who continue aggressive treatment, with better quality of life.',
+          'Hospice is appropriate when a physician certifies a life expectancy of six months or less if the illness runs its expected course, and when the family and patient have decided the focus of care should shift from trying to cure the disease to comfort, dignity, and quality of life. Most families who have been through it say they wish they had started hospice sooner. Research has consistently shown that hospice patients live as long as or longer than comparable patients who keep pursuing aggressive treatment, and they do it with less pain, fewer hospitalizations, and more time at home. Hospice is also reversible. If a patient stabilizes and improves, you can leave hospice and resume curative treatment at any point.',
+      },
+      {
+        question: 'Does choosing hospice mean stopping all treatment?',
+        answer:
+          'No. Hospice shifts the goal of care toward comfort, and most treatments continue or intensify for that reason. Pain medications, oxygen, nausea control, infection treatment when it relieves suffering, hydration, and comfort procedures all stay on the plan. What stops are treatments aimed at curing the terminal illness itself, such as chemotherapy intended to cure cancer, dialysis for end-stage renal disease if the patient chooses to forgo it, or aggressive ICU-level interventions. You can revoke hospice at any time if you change your mind.',
       },
       {
         question: 'Does Medicare cover hospice in Texas?',
         answer:
-          'Yes. Medicare covers hospice under the Medicare Hospice Benefit (Part A) when a physician certifies a terminal prognosis of 6 months or less. Coverage includes physician services, nursing visits, aide services, medical equipment, medications related to the terminal illness, counseling, and 13 months of bereavement support for the family. There is minimal cost-sharing: a small copay for medications (capped at $5) and 5% of the Medicare-approved amount for respite care.',
+          'Yes, and the coverage is broad. The Medicare Hospice Benefit under Part A activates when a physician certifies a terminal prognosis of six months or less. It covers physician services, nursing visits, home health aide visits, medical social work, chaplain or spiritual counseling, volunteer services, medications tied to the terminal illness, medical equipment and supplies, short-term inpatient care for symptom management, up to five days of inpatient respite at a time for the family, and 13 months of bereavement support for the family after the patient passes away. Out-of-pocket costs are minimal: up to $5 per prescription and 5 percent coinsurance for respite care. Texas Medicaid and most private insurance plans offer comparable coverage.',
       },
       {
-        question: 'What services does hospice provide?',
+        question: 'What services does a hospice team actually provide?',
         answer:
-          'Hospice provides a comprehensive team-based approach: physician oversight and coordination, skilled nursing visits for symptom and pain management, home health aide assistance with personal care, social work services for emotional support and care planning, chaplain or spiritual counseling, volunteer companionship and respite for family caregivers, medications and medical equipment related to the terminal diagnosis, and bereavement counseling for family members after the patient\'s death.',
+          'Hospice is delivered by an interdisciplinary team, not a single clinician. The team usually includes a hospice physician who oversees the plan of care, a registered nurse who serves as the primary care coordinator and visits regularly (more often as symptoms change), a home health aide for personal care like bathing and grooming, a medical social worker to help the family with decisions, planning, and resources, a chaplain or spiritual counselor (available regardless of religious background), and trained volunteers who provide companionship and give caregivers a break. Someone on the team is on call 24 hours a day. A reliable hospice should be able to reach a nurse within roughly 30 minutes at any hour.',
+      },
+      {
+        question: 'Where can hospice care be delivered in Texas?',
+        answer:
+          'Wherever the patient lives. Most hospice care in Texas happens in the patient\'s own home, with the team visiting on a regular schedule. It can also be delivered in a nursing home or assisted living community. In that case, the patient keeps paying the facility for room and board while Medicare pays the hospice provider separately. Many Texas hospice agencies operate dedicated inpatient hospice houses for short stays when symptoms are too difficult to manage at home. Medicare covers General Inpatient (GIP) hospice in a hospital or hospice facility for symptom crises, and inpatient respite (up to five days at a time) gives family caregivers a break in a facility setting, also covered by the benefit.',
+      },
+      {
+        question: 'How do I choose a good Texas hospice provider?',
+        answer:
+          'Start with the CMS Hospice Compare tool, which posts CAHPS (Consumer Assessment of Healthcare Providers and Systems) survey ratings. Those ratings capture real family feedback on communication, symptom control, and emotional support. Then ask prospective hospices a pointed set of questions. What is your nurse-to-patient ratio? How quickly does your on-call nurse respond at 2 a.m.? Do you have a hospice inpatient facility for symptom crises, and do you have a relationship with local hospitals for GIP? What volunteer and chaplain services do you offer? What does your bereavement program look like? Both nonprofit and for-profit hospices can deliver excellent care. Those questions help you tell the thoughtful providers from the rest. And pay attention to how you feel about the primary nurse at the intake visit, because you will end up relying on that person heavily.',
       },
     ],
   },
@@ -217,19 +277,34 @@ const TYPE_CONFIG: Record<string, {
     contentHubSlug: 'adult-day-care',
     faqs: [
       {
-        question: 'What activities do adult day care programs offer?',
+        question: 'What is adult day care, and who is it for?',
         answer:
-          'Adult day care programs typically offer a structured schedule of social activities, health monitoring, therapeutic activities, meals and snacks, transportation assistance, and personal care help. Many programs offer specialized programming for people with dementia. Activities often include group exercise, arts and crafts, music therapy, educational programs, and outings. The goal is meaningful engagement during the day while giving family caregivers a much-needed break.',
+          'Adult day care is a daytime program, typically running weekdays from about 7 a.m. to 6 p.m., that provides supervision, meals, activities, and often health services for seniors who still live at home with family. Participants go home every evening. It is not residential. Two common models exist. Social adult day programs focus on activities, companionship, meals, and supervision. Medical day health programs (in Texas these are licensed as DAHS, which stands for Day Activity and Health Services) add skilled nursing, medication management, therapies, and health monitoring. Adult day care works best for seniors with mild-to-moderate dementia, physical limitations, or social isolation whose family caregivers work during the day or simply need structured respite.',
       },
       {
         question: 'How much does adult day care cost in Texas?',
         answer:
-          'According to 2025 CareScout data, the median daily cost of adult day care in Texas is approximately $78 per day — roughly $1,560/month for a 5-day-a-week schedule. This makes adult day care one of the most affordable senior care options. Costs vary by location and the level of services provided. Programs with medical supervision or specialized dementia care may cost more.',
+          'Texas has the lowest median daily rate for adult day care in the country. CareScout puts the 2025 figure at roughly $78 a day. A standard five-day-a-week schedule works out to about $1,560 a month, which makes adult day care by a wide margin the most affordable formal senior-care option short of informal family caregiving. DAHS (medical model) programs tend to cost a bit more than social-model programs because of the on-site nursing and therapy. Some programs offer sliding-scale fees, half-day rates, or bundled pricing that includes transportation. Ask what is included before comparing two programs on price alone.',
       },
       {
-        question: 'Is adult day care covered by Medicaid in Texas?',
+        question: 'Does Texas Medicaid pay for adult day care?',
         answer:
-          'Yes. Texas Medicaid covers adult day care through the STAR+PLUS Home and Community-Based Services (HCBS) waiver for eligible individuals. The Day Activity and Health Services (DAHS) program specifically funds adult day care for Medicaid recipients who would otherwise require nursing home care. To qualify, you must meet financial eligibility requirements and have a functional need for supervision and assistance. Contact HHSC at 1-800-252-0154 to apply.',
+          'Yes. The Texas DAHS (Day Activity and Health Services) program is a Medicaid-funded adult day program for recipients who meet nursing-home level-of-care criteria but can still stay at home with structured daytime support. The STAR+PLUS HCBS waiver also pays for adult day services for eligible seniors. To qualify, you need to meet Texas Medicaid financial eligibility and have a documented functional need, whether that is help with activities of daily living, supervision because of dementia, or something similar. Start the application by calling HHSC at 2-1-1 or 1-800-252-9240. Wait times vary by region but are generally shorter than the wait for nursing home Medicaid.',
+      },
+      {
+        question: 'What happens in a typical day at adult day care?',
+        answer:
+          'Programs generally run a structured but flexible schedule. Morning arrival usually includes a welcome and some informal socializing, followed by a group activity like gentle exercise, a current events discussion, or music. A hot midday meal is provided, along with morning and afternoon snacks. Afternoons typically feature a themed activity such as arts and crafts, reminiscence therapy, games, gardening, or an outing. Staff check on health throughout the day (blood pressure, medication reminders), help with toileting and bathing as needed, and provide one-on-one engagement for participants who cannot join group activities. DAHS programs add skilled nursing care, therapies, and sometimes podiatry or dental visits on site. Door-to-door transportation is often available for an additional fee or included in DAHS programs.',
+      },
+      {
+        question: 'How does adult day care compare to in-home care or assisted living?',
+        answer:
+          'Each option is built for a different situation. Adult day care is the cheapest and assumes family members are home and able to provide care in the evenings, overnight, and on weekends. It shines for socialization and respite but falls short for seniors who live alone. In-home care offers one-on-one attention in a familiar setting and can be scheduled flexibly, though full-time coverage gets expensive and can feel isolating for the participant. Assisted living provides around-the-clock support and meals in a residential setting, but it is a bigger cost and a bigger life change, and it takes the senior out of their own home. Many Texas families combine pieces. Adult day care three to five days a week plus family caregiving on nights and weekends can postpone a move to assisted living or a nursing home by years.',
+      },
+      {
+        question: 'How do I choose a good Texas adult day program?',
+        answer:
+          'Confirm state licensure first. Texas HHSC licenses adult day care facilities under the DADS/HHSC licensing rules, and DAHS programs have additional requirements, including an on-site registered nurse. Visit during midday when activities are in full swing and lunch is being served. Are participants engaged, or just sitting and staring at the wall? Is the staff-to-participant ratio reasonable (4:1 is typical, and lower is better for dementia participants)? Is there specialized dementia programming if your loved one needs it? Ask about transportation, meal quality (ask to see the week\'s menu), how the program communicates with families (daily notes, app updates), and the program\'s policy on challenging behaviors or medication administration. A program worth enrolling in will welcome questions and let you observe for as long as you like.',
       },
     ],
   },
@@ -589,7 +664,7 @@ export async function StateFacilityTypePage({
                 </div>
               )}
               <p className="text-slate-600 text-sm">
-                Costs vary significantly by city — major metros typically run 15–30% higher than rural areas.
+                Costs vary a lot by city. Major metros typically run 15 to 30 percent higher than rural areas.
               </p>
             </div>
           )}
@@ -620,7 +695,7 @@ export async function StateFacilityTypePage({
             </h2>
             <p className="text-slate-600 text-sm mb-4">
               Our free Care Assessment asks about health needs, safety concerns, and independence
-              level to recommend the best type of care — in about 5 minutes.
+              level to recommend the best type of care, in about 5 minutes.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
